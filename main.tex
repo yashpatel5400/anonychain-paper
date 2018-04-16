@@ -379,13 +379,14 @@
 \usepackage{amsthm}
 \usepackage{float}
 \usepackage{graphicx}
+\usepackage{hyperref}
 
 % correct bad hyphenation here
 \begin{document}
 \title{Upon the Deanonymization of Bitcoin Transactions}
 \author{Yash Patel, Matt Weinberg}
 
-\markboth{MAT Junior Independent Work 2017}%
+\markboth{MAT Senior Thesis 2018}%
 {Shell \MakeLowercase{\textit{et al.}}: Bare Demo of IEEEtran.cls for Journals}
 \maketitle
 
@@ -393,11 +394,99 @@
 \end{abstract}
 
 \section{Introduction}
+Bitcoin, previously relegated as a technology residing in the niche of only the most technologically competent of computer scientists, has emerged into the mainstream public in an enormous way. Ever since its explosive rise over the past year, technologists and investors both have sought to understand and exploit its technical limits. As illustrated in Figure \ref{fig:BTC_price}, speculation on the asset of Bitcoin has become an undeniable sector of the modern technology world, especially when viewed from those outside of it. While current speculations are high, many investors and technologists both struggle to understand the fundamental use case of Bitcoin and its underlying technology: blockchain. The speculative bubble is largely the product of vacuous interest pooling into an asset of misunderstood potential, paralleling the financial bubble surrounding the dot-com bubble. 
 
+\begin{figure}
+    \label{fig:BTC_price}
+    \centering
+    \includegraphics[width=0.4\textwidth]{BTC_price.png}
+    \caption{The price of one Bitcoin, as marked by Bloomberg. While technologists saw its promise many years prior, Bitcoin's rise in popularity in the general public has led to exponential speculative interest \cite{goldman}.}
+\end{figure}
+
+Prior to further discussing Bitcoin's use cases as a whole, it serves a purpose to understand both the technology and underlying technology first. Briefly, Bitcoin is a cryptocurrency, by which we mean a ``digital unit of exchange that is not backed by a government-issued legal tender" \cite{virtual}. The blockchain technology underpinning Bitcoin and other cryptocurrencies, as illustrated in Figure \ref{fig:blockchain}, is ``a solution to the double-spending problem using a peer-to-peer distributed timestamp server to generate computational proof of the chronological order of transactions. The system is secure as long as honest nodes collectively control more CPU power than any cooperating group of attacker nodes" \cite{bitcoin}. Described plainly, blockchain seeks to solve a technical problem, namely that of achieving consensus in a distributed system while preventing double-spending of the asset being exchanged, i.e. arbitrating exchange of a common asset without the need of a trusted central authority. Bitcoin happens to be one such asset, but there now exist many others, each building further layers of properties to serve their own purposes.
+
+\begin{figure}
+    \label{fig:blockchain}
+    \centering
+    \includegraphics[width=0.4\textwidth]{blockchain.png}
+    \caption{Blockchain, the underlying technology behind Bitcoin and all other cryptocurrencies, is simply a data structure consisting of an extended linked list of hash pointers with metadata. These pieces of metadata, in addition to carrying the actual BTC information of interest, more importantly serve as a piece of data that can be used for efficient verification of double-spending in a distributed system \cite{blockchain-img}.}
+\end{figure}
+
+Simply viewed from this perspective, there appears to be nothing inherent in the association of Bitcoin with privacy. This aspect of blockchain and BTC largely arises from social concerns. Specifically, given that the blockchain ledger is available in a distributed setting, all transactions are publicly visible. 
+
+Bitcoin, by contrast, is designed with pseudonymous identities. Account numbers are public keys of a specific asymmetric encryption system \cite{laundering}.
+
+Returning to the topic of interest, many of the use cases emerged surrounding Bitcoin and the cryptocurrency space in general reside in the realms of piracy and illicit activity, into which we briefly delve. 
+
+
+This includes Bitcoin, a decentralized cryptographic currency which emerged over the past three years and has been regarded with suspicion for its allegedly anonymous and irreversible transactions, its popularity in underground markets, and its association with several cases of investment fraud \cite{laundering}.
+
+anonymous online market very often specialize in ``black market" goods, such as pornography, weapons or narcotics. Silk Road is one such anonymous online market \cite{silk}.
+
+Silk Road only supports Bitcoin (BTC, [30]) as a trading currency. Bitcoin is a peer-to-peer, distributed payment system that supports verifiable transactions without the need for a central third-part \cite{silk}.
+
+Comparing the two numbers shows that Silk Road transactions correspond to about 4.5\% of all transactions occurring in exchange \cite{silk}.
+
+regulation of virtual currencies, cybercrimes and payment systems, darknets, Tor and the “deep web,” Bitcoin; Liberty Reserve, Silk Road, and Mt. Gox. Virtual currencies have quickly become a reality, gaining significant traction in a very short period of time, and are evolving rapidly \cite{virtual-currency}.
+
+present particularly difficult law enforcement challenges because of their ability to transcend national borders in the fraction of a second, unique jurisdictional issues and anonymity due to encryption. Due primarily to their anonymity, virtual currencies have been linked to numerous types of crimes, including facilitating marketplaces for: assassins, attacks on businesses, the exploitation of children (including pornography), corporate espionage, counterfeit currencies, drugs, fake IDs and passports, high yield investment schemes (Ponzi schemes and other financial frauds), sexual exploitation, stolen credit cards and credit card numbers, and weapons \cite{virtual-currency}. 
+
+The outline of this paper is, therefore, as follows:
+\begin{itemize}
+    \item Section \ref{background}: Covers through the major technical topics of interest that are to be used in the remainder of the paper. Most of the findings presented through this section entail a literature review of well-known works in their respective fields, although occasional novel material is presented when appropriate for sake of organization. We further note that a majority of figures presented through this section entail those catered from previous research endeavors.
+    \item Section \ref{methodology}: Walks through the structure of the experiments that were written and conducted. The code is freely available at: \url{https://github.com/yashpatel5400/anonychain}. We further provide the specifics of the expected structure of results from each experiment.
+    \item Section \ref{results}: Presents the results of the experiments laid of in the previous section, largely in the form of graphs when appropriate and tables otherwise.
+    \item Section \ref{discussion}: Discusses the main takeaways from the graphical results as they relate to the research problem posed above. Specifically, these discussions will pointedly answer the extent to which spectral clustering can be used for deanonymizing Bitcoin transactions.
+    \item Section \ref{conclusion}: Provide follow-up research ideas that could be pursued should readers feel inspired and interested in furthering the research conducted herein.
+\end{itemize}
+
+\section{Background}\label{background}
+
+\section{Methodology}\label{methodology}
+
+\section{Results}\label{results}
+
+\section{Discussion}\label{discussion}
+
+\section{Conclusion}\label{conclusion}
 
 \newpage
 \begin{thebibliography}{1}
-\bibitem{} Test
+\bibitem{data-stream} Aggarwal, Charu C., et al. ``A Framework for Clustering Evolving Data Streams." Proceedings 2003 VLDB Conference, 2003, pp. 81–92., doi:10.1016/b978-012722442-8/50016-1.
+\bibitem{spectral-sparse} Batson, Joshua, et al. ``Spectral Sparsification of Graphs." Communications of the ACM, vol. 56, no. 8, 2013, p. 87., doi:10.1145/2492007.2492029.
+\bibitem{coarsening} Chevalier, Cedric, and Ilya Safro. ``Comparison of Coarsening Schemes for Multilevel Graph Partitioning." Lecture Notes in Computer Science Learning and Intelligent Optimization, 2009, pp. 191–205., doi:10.1007/978-3-642-11169-3\_14.
+\bibitem{evolutionary-temporal} Chi, Yun, et al. ``Evolutionary Spectral Clustering by Incorporating Temporal Smoothness." Proceedings of the 13th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining - KDD '07, 2007, doi:10.1145/1281192.1281212.
+\bibitem{silk} Christin, Nicolas. ``Traveling the Silk Road: A Measurement of a Large Anonymous Online Marketplace." 2012, doi:10.21236/ada579383.
+\bibitem{scikit} ``Clustering." Scikit-Learn, scikit-learn.org/stable/modules/clustering.html.
+\bibitem{coinjoin} ``CoinJoin: Bitcoin Privacy for the Real World." Bitcoin Talk, 22 Aug. 2013, bitcointalk.org/index.php?topic=279249.0.
+\bibitem{dbscan} Daszykowski, M., and B. Walczak. ``Density-Based Clustering Methods." Comprehensive Chemometrics, 2009, pp. 635–654., doi:10.1016/b978-044452701-1.00067-3.
+\bibitem{eigen-update} Dhanjal, Charanpal, et al. ``Efficient Eigen-Updating for Spectral Graph Clustering." Neurocomputing, vol. 131, 2014, pp. 440–452., doi:10.1016/j.neucom.2013.11.015.
+\bibitem{automatic} Ermilov, Dmitry, et al. ``Automatic Bitcoin Address Clustering." 2017 16th IEEE International Conference on Machine Learning and Applications (ICMLA), 2017, doi:10.1109/icmla.2017.0-118.
+\bibitem{evaluation} ``Evaluation of Clustering." Stanford NLP, 2008, nlp.stanford.edu/IR-book/html/htmledition/evaluation-of-clustering-1.html.
+\bibitem{follow} Greenberg, Andy. ``Follow The Bitcoins: How We Got Busted Buying Drugs On Silk Road's Black Market." Forbes, Forbes Magazine, 7 Sept. 2013, www.forbes.com/sites/andygreenberg/2013/09/05/follow-the-bitcoins-how-we-got-busted-buying-drugs-on-silk-roads-black-market/\#79bb83c8adf7.
+\bibitem{blocksci} Kalodner, Harry. ``BlockSci: Design and Applications of a Blockchain Analysis Platform." ArXiv Preprint, 2017, doi:1709.02489.
+\bibitem{metis} Karypis, George, and Vipin Kumar. ``METIS--Unstructured Graph Partitioning and Sparse Matrix Ordering System, Version 2.0." 1995.
+\bibitem{goldman} Katz, Lily. ``Goldman Says Cryptocurrencies May Succeed as Form of Real Money." Bloomberg.com, Bloomberg, 10 Jan. 2018, www.bloomberg.com/news/articles/2018-01-10/goldman-says-viability-of-crypto-is-highest-in-developing-world.
+\bibitem{mincut} Kothari, Pravesh. ``Karger's Min Cut Algorithm." 2015, Princeton University, Princeton University.
+\bibitem{dynamic} LaViers, Amy, et al. ``Dynamic Spectral Clustering." Georgia Institute of Technology, 2010.
+\bibitem{sketch} Liberty, Edo. ``Simple and Deterministic Matrix Sketching." Proceedings of the 19th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining - KDD '13, 2013, doi:10.1145/2487575.2487623.
+\bibitem{spectral} Luxburg, Ulrike Von. ``A Tutorial on Spectral Clustering." Statistics and Computing, vol. 17, no. 4, 2007, pp. 395–416., doi:10.1007/s11222-007-9033-z.
+\bibitem{fistful} Meiklejohn, Sarah, et al. ``A Fistful of Bitcoins." Proceedings of the 2013 Conference on Internet Measurement Conference - IMC '13, 2013, doi:10.1145/2504730.2504747.
+\bibitem{laundering} Moser, Malte, et al. ``An Inquiry into Money Laundering Tools in the Bitcoin Ecosystem." 2013 APWG ECrime Researchers Summit, 2013, doi:10.1109/ecrs.2013.6805780.
+\bibitem{sbm} Mossel, Elchanan, et al. ``Reconstruction and Estimation in the Planted Partition Model." Probability Theory and Related Fields, vol. 162, no. 3-4, 2014, pp. 431–461., doi:10.1007/s00440-014-0576-6.
+\bibitem{bitcoin} Nakamoto, Satoshi. ``Bitcoin: A Peer-to-Peer Electronic Cash System." 2008.
+\bibitem{incremental} Ning, Huazhong, et al. ``Incremental Spectral Clustering by Efficiently Updating the Eigen-System." Pattern Recognition, vol. 43, no. 1, 2010, pp. 113–127., doi:10.1016/j.patcog.2009.06.001.
+\bibitem{dynamic-sbm} Pensky, Marianna, and Teng Zhang. ``Spectral Clustering in the Dynamic Stochastic Block Model." ArXiv Preprint, 2017, doi:1705.01204.
+\bibitem{fast-coarsen} Purohit, Manish, et al. ``Fast Influence-Based Coarsening for Large Networks." Proceedings of the 20th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining - KDD '14, 2014, doi:10.1145/2623330.2623701.
+\bibitem{spectral-bisection} Rocha, Israel. ``Improvements on Spectral Bisection." ArXiv Preprint, 2017, doi:1703.00268.
+\bibitem{cluster-review} Schaeffer, Satu Elisa. ``Graph Clustering." Computer Science Review , 2007, pp. 27–64.
+\bibitem{bitcoin-etf} ``Self - Regulatory Organizations; NYSE Arca, Inc; Order Instituting Proceedings to Determine Whether to Approve or Disapprove a Proposed Rule Change to List and Trade the Shares of the ProShares Bitcoin ETF and the ProShares Short Bitcoin ETF under NYSE Arca Rule 8.200 - E, Commentary .02." Securities and Exchange Commission, 23 Mar. 2018.
+\bibitem{fast-kmeans} Shindler, Michael, et al. ``Fast and Accurate k-Means For Large Datasets.” Advances in Neural Information Processing Systems, 2011. 
+\bibitem{resistance} Spielman, Daniel A., and Nikhil Srivastava. ``Graph Sparsification by Effective Resistances." Proceedings of the Fourtieth Annual ACM Symposium on Theory of Computing - STOC 08, 2008, doi:10.1145/1374376.1374456.
+\bibitem{virtual} Trautman, Lawrence J. ``Virtual Currencies: Bitcoin \& What Now after Liberty Reserve and Silk Road?" SSRN Electronic Journal, 2014, doi:10.2139/ssrn.2393537.
+\bibitem{blockchain-img} Wander, Matthaus. ``Bitcoin Block Data." Wikimedia Commons, 22 June 2013, commons.wikimedia.org/wiki/File:Bitcoin\_Block\_Data.png.
+\bibitem{scalable} Whang, Joyce Jiyoung, et al. ``Scalable and Memory-Efficient Clustering of Large-Scale Social Networks." 2012 IEEE 12th International Conference on Data Mining, 2012, doi:10.1109/icdm.2012.148.
+\bibitem{ico} Zetzsche, Dirk A., et al. ``The ICO Gold Rush: It's a Scam, It's a Bubble, It's a Super Challenge for Regulators." SSRN Electronic Journal, 2017, doi:10.2139/ssrn.3072298.
 \end{thebibliography}
 
 \end{document}

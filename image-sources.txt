@@ -1,0 +1,5 @@
+BTC_price.png: https://www.bloomberg.com/news/articles/2018-01-10/goldman-says-viability-of-crypto-is-highest-in-developing-world
+deanonymization.png: https://www.forbes.com/sites/andygreenberg/2013/09/05/follow-the-bitcoins-how-we-got-busted-buying-drugs-on-silk-roads-black-market/#79bb83c8adf7
+blockchain.png: https://commons.wikimedia.org/wiki/File:Bitcoin_Block_Data.png
+cluster_example.png: https://www.reddit.com/r/Bitcoin/comments/34yvtf/coinbase_is_behaving_like_big_brothermonitoring/
+coinjoin.png: https://bitcointalk.org/index.php?topic=279249.0
