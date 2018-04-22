@@ -380,10 +380,17 @@
 \usepackage{float}
 \usepackage{graphicx}
 \usepackage{hyperref}
- 
+\usepackage{bbm}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{corollary}{Corollary}[theorem]
 \newtheorem{lemma}[theorem]{Lemma}
+
+\makeatletter
+\def\BState{\State\hskip-\ALG@thistlm}
+\makeatother
 
 % correct bad hyphenation here
 \begin{document}
@@ -556,37 +563,467 @@ With that being said, this investigation began by modelling the heuristics graph
 In line with that, we begin our discussion with an introduction to the stochastic block model, commonly shortened to SBM. The SBM is a ``model for random graphs on $n$ nodes with two equal-sized clusters, with an between-class edge probability of $q$ and a within-class edge probability of $p$" \cite{sbm}. We, instead, focus on an expanded view of the SBM. That is to say, rather than solely being between two clusters, we define the SBM to have $n$ clusters such that for any clusters $C_i, C_j$, the probability a vertex in the first will be connected to a vertex in the second is $p$ if $i=j$ and $q$ if $i\neq j$, where $p > q$. In other words, this model produces a random graph comprised of many clusters, of respective sizes $n_1,n_2,...n_k$, with vertices more likely to be connected within a given cluster as compared to other clusters. This, therefore, roughly corresponds to our idealized form of the heuristics graph, namely where the heuristics will be more likely to be present between vertices that belong to the same cluster (i.e. same real-world entity). The main leak in this simplification arises from the fact that, in the case of the SBM, a single run will either have edges or not, with probability $p$ or $q$ depending on the vertices of interest. However, in expectation, namely when average over a series of $n$ runs as $n\rightarrow\infty$, the adjacency matrix will resemble that of the heuristics graph, specifically considering the case where the weights have been normalized, creating a natural correspondence to the probabilities in this matrix:
 
 \[
-C=
-\left[
-\begin{array}{c|c}
-M & N \\
+\sbox0{$\begin{matrix}p&p&p\\p&p&p\\p&p&p\end{matrix}$}
+\sbox1{$\begin{matrix}q&q&q\\q&q&q\\q&q&q\end{matrix}$}
+%
+C=\left[
+\begin{array}{c|c|c|c}
+\usebox{0}&\makebox[\wd0]{\large $Q$}&\makebox[\wd0]{\large $\dots$}&\usebox{1}\\
 \hline
-R & S
+\vphantom{\usebox{0}}\makebox[\wd0]{\large $Q$}&\makebox[\wd0]{\large $P$}&\makebox[\wd0]{\large $\dots$}&\makebox[\wd0]{\large $Q$}\\
+\hline
+\vphantom{\usebox{0}}\makebox[\wd0]{\large $\vdots$}&\makebox[\wd0]{\large $\dots$}&\makebox[\wd0]{\large $\ddots$}&\makebox[\wd0]{\large $\vdots$}\\
+\hline
+\vphantom{\usebox{0}}\makebox[\wd0]{\large $Q$}&\makebox[\wd0]{\large $\dots$}&\makebox[\wd0]{\large $\dots$}&\makebox[\wd0]{\large $P$}\\
 \end{array}
 \right]
 \]
 
-The main difference between the two arises in the fact that there is little to suggest different clusters will have similar weights in the heuristics graph. After all, it may be completely obvious that some vertices are in the same clustering, making their associated weight high, while another set of vertices have high uncertainty, making their weight lower, though the two should both be clustered. The natural extension to the SBM would simply having a different $p_i$ for each cluster $C_i$. Yet, this complicates the model to a degree such that the clustering algorithms trials cannot be conducted with the same ease as they could be otherwise. 
+Where each of the block $P,Q$ entries are simply referring to $(p,q)\mathbbm{1}\mathbbm{1}^T$ respectively, as indicated in some of the matrix entries. The main difference between the two arises in the fact that there is little to suggest different clusters will have similar weights in the heuristics graph. After all, it may be completely obvious that some vertices are in the same clustering, making their associated weight high, while another set of vertices have high uncertainty, making their weight lower, though the two should both be clustered. The natural extension to the SBM would simply having a different $p_i$ for each cluster $C_i$. Yet, this complicates the model to a degree such that the clustering algorithms trials cannot be conducted with the same ease as they could be otherwise. 
 
 As a result, we sacrifice this piece of accuracy with the assumption that algorithm performance on this special case will scale appropriately to the general case. That is to say, we assume that, if algorithm A has better performance on the SBM than B, it should similarly perform better on the generalized case with varying $p_i$, though the two very likely will have degraded performance. The intuition reasoning behind said assumption is that the main detractor of performance will be when there are $p,q$ values that are comparable. Consider the edge case where $p=q$; clearly, this case can have no algorithm that performs clustering with any better accuracy than $50\%$. Thus, the bottleneck of the performance will be the lowest $p_i$ value and similarly the highest $q_{ij}$, where $q_{ij}$ denotes the natural extension of the notion of $q$ to arbitrarily many clusters, namely the probability that a vertex from $C_i,C_j$ will be adjacent. However, we can consider a simulation in which $p,q$ are relatively near one another and evaluate the algorithms' performances on said case. Since this marks the worst/most difficult case, it follows that the best algorithm will similarly scale to be the best in the easier cases. This intuition, however, is confirmed through empirical testing in Section \ref{methodology}.
 
+We finally present one noteworthy theorem of interest with relevance to SBMs, specifically the limitations with which they can be clustered. This makes more concrete the notion that if $p,q$ are ``sufficiently close," the graph clustering cannot be performed in any manner better than chance in the limit of large graphs (where $p=a/n,q=b/n$ for a graph with a total of $n$ vertices) \cite{sbm}:
 
-% Theorem 2.1.Ifa+b>2and(a−b)2≤2(a+b) then, for any fixed vertices uandv , Pn(σu=+SG,σv=+)→12 a.a.s. (8) 
+\begin{theorem}
+If $a + b > 2$ and $(a-b)^2\le2(a+b)$ then, for any fixed vertices $u$ and $v$:
 
-\subsection{Graph Clustering Evaluation}
-We further assume that when referring to graph clustering, we wish to separate the set $V$ corresponding to $G$ into sets $\{C_1, C_2, ..., C_n\}$, such that $\cap_{i} C_{i} = \emptyset$, where the objective is to minimize the ``distance" between vertices in a single $C_i$ and maximize that between any $C_i,C_j$ for $i\neq j$, where ``distance" often has a natural interpretation as related to edge weights in the graph.
- 
+$$ \mathbb{P}_n(\sigma_u = + | G, \sigma_v = +) \rightarrow \frac{1}{2} a.a.s. $$
+\end{theorem}
+
+Where a.a.s. corresponds to asymptotically almost surely convergence. The specifics of this notion of convergence are not necessarily of relevance, though we put it here for sake of completeness. Namely, this corresponds to when ``An event $E$...holds with probability $1-o(1)$, thus the probability of success goes to $1$ in the limit $n\rightarrow\infty$" \cite{terry}. In other words, this is we cannot even determine whether two random vertices in the SBM are the same label or not better than random change if $a,b$ are not sufficiently different. As demonstrate in Figure \ref{fig:region}, this corresponds to where $p,q$ are quite close to one another. Note that this region is symmetric about the line $x=y$, since the notions of $p,q$ can be flipped at any point and the complexity of clustering the model would remain the same. Since the context herein applies to a generalized form of the SBM, we provide a straightforward extension of this theorem as follows:
+
+\begin{figure}
+    \label{fig:region}
+    \centering
+    \includegraphics[width=0.4\textwidth]{region.png}
+    \caption{This marks the region in which no algorithm can perform clustering better than by chance. If the graph procured falls within this region, seeing as the $n$ considered herein is massive, it seems entirely infeasible that any algorithm will have reasonable performance.}
+\end{figure}
+
+\begin{corollary}
+Assuming $\mathcal{G}=\cup_{i}\mathcal{G_i}=\bigcup_{i}(n_i,\frac{a_i}{n_i},\frac{a_i}{n_i})$, if for any choice $i$ $a_i + b_i > 2$ and $(a_i-b_i)^2\le2(a_i+b_i)$ then the problem of clustering is not solvable as $n\rightarrow\infty$.
+\end{corollary}
+
+\begin{proof}
+The proof follows as a trivial consequence of the previously relayed theorem. A clustering problem is considered solvable when ``one can a.a.s. find a [cluster] which is positively correlated with the" true cluster \cite{sbm}. As any clustering algorithm must inherently cluster all subgraphs of $\mathcal{G}$, simply consider its clustering on $\mathcal{G_i}$, for which there is no positive correlation in the limit of $n\rightarrow\infty$. The overall correlation, therefore, must similarly be non-positive, meaning this overall clustering task is unsolvable.
+\end{proof}
+
 \subsection{Clustering Algorithms}
+Moving on from the SBM, we look to discussing the second topic at hand, specifically graph clustering. We present the relevant algorithms, followed by specific extensions that we seek to employ due to the massive scale of the data considered herein. This discussion of clustering is summarized in a table presented following all the sections, namely table \ref{tab:algs}. We further assume that when referring to graph clustering, we wish to separate the set $V$ corresponding to $G$ into sets $\{C_1, C_2, ..., C_n\}$, such that $\cap_{i} C_{i} = \emptyset$, where the objective is to minimize the ``distance" between vertices in a single $C_i$ and maximize that between any $C_i,C_j$ for $i\neq j$, where ``distance" often has a natural interpretation as related to edge weights in the graph. 
+
 \subsubsection{K-means}
+K-means is the canonical example of a clustering algorithm. Given its age and the continual improvements in efficiency to which it has been subjected, k-means can be run efficiently on massive datasets. Specifically, ``given an integer $k$ and a set of $n$ data points in $\mathcal{R}^d$ , the goal is to choose $k$ centers so as to minimize $\phi$, the total squared distance between each point and its closest center" \cite{k-means}. The clustering of points, therefore, is simply according to which mean it is located nearest to. In other words, two vertices whose associated ``cluster mean" is the same will be clustered into the same group. The determination of such $k$ clusters, however, is an NP-hard problem, for which a heuristic has been developed and repeatedly confirmed in practice. This employed heuristic works as follows: it ``begins with k arbitrary `centers,' typically chosen uniformly at random from the data points. Each point is then assigned to the nearest center, and each center is recomputed as the center of mass of all points assigned to it. These last two steps are repeated until the process stabilizes" \cite{k-means}. 
+
+Thus, as with many of the other algorithms considered below in this paper, k-means requires prior knowledge of the number of clusters to be considered in the end. We take an aside to address this point. While it may seem wholly arbitrary that the number of clusters be known ahead of time, as there is little way to ascertain ahead of time how many \textit{unique} users of Bitcoin there are on the network, this serves as a means by which the granularity of results can be controlled. That is to say, given two identical networks, we could potentially extract more fine clusterings with higher levels of $k$. For example, in the edge case of $k=2$, the clustering would likely resemble something along the lines of ``Coinbase accounts" and ``Non-Coinbase accounts," namely a separation of a supercluster from the remainder of the graph. We can, therefore, imagine that $k\rightarrow\infty$, clusters associated with individual people or small organizations would form out of the massive agglomerated ``Non-Coinbase" cluster. In the limit, however, we would simply end up with singleton clusters, which would serve little purpose for identifying real-world entities. The selection of $k$, therefore, is a balancing act between getting fine grain separation of individual entities and uninformative results.
+
+Thus, the main use case of k-means herein will be as a baseline for getting results. That is to say, we expect \textit{all} other algorithms employed to have superior performance than k-means, though they may suffer greatly in time complexity.
+
 \subsubsection{Spectral}
+Spectral clustering, as implied by its name, deals with clustering on the basis of eigenvalues and eigenvectors. Which eigenvectors to be used for such clustering is not immediately obvious. However, it turns out to be those of a matrix that has fundamental importance to its corresponding graph: the Laplacian. While the Laplacian has differing definitions by context, in the realm of graph theory, it simply refers to:
+
+$$ L = D-W $$
+
+Where hereto we denote $L$ as the Laplacian matrix; $D$ the degree matrix, containing the degree of vertex $i$ in position $D_{ii}$ and 0s elsewhere; and $W$ the weight matrix, containing the weight of edge $e_{ij}$ in position $D_{ij}$. Since $D,W$ are both symmetric matrices in the case of an undirected graph, as we have here, $L$ too is symmetric. Having presented the definition, we follow up with some relevant theorems regarding this Laplacian matrix \cite{spectral}:
+
+\begin{theorem}
+\begin{itemize}
+    \item The smallest eigenvalue of $L$ is $0$, the corresponding eigenvector is the constant one vector $\mathbbm{1}$.
+    \item $L$ has $n$ non-negative, real-valued eigenvalues $0=\lambda_1\le\lambda_1\le\dots\le\lambda_n$.
+\end{itemize}
+\end{theorem}
+
+From this theorem spawn several other results which have direct consequences in the use of eigenvectors for the purposes of graph clustering. The first theorem is as follows:
+
+\begin{theorem}
+Let $G$ be an undirected graph with non-negative weights. Then the multiplicity $k$ of the eigenvalue 0 of $L$ equals the number of connected components $A_1,\dots,A_k$ in the graph. The eigenspace of eigenvalue $0$ is spanned by the indicator vectors $\mathbbm{1}_{A_1},\dots,\mathbbm{1}_{A_k}$ of those components.
+\end{theorem}
+
+While we refer to \cite{spectral} for the whole proof of this result, we present a sketch of the primary portion of this proof from which an intuitive understanding arises. Specifically, consider the idealized case of a graph $\mathcal{G}$ containing clusters such that vertices within the clusters are fully connected and those in different clusters are not adjacent. The corresponding graph Laplacian for such a $\mathcal{G}$ would be:
+
+\[
+\begin{bmatrix}
+    L_{1} &  & &  \\
+    & L_{2} & &  \\
+    & & \ddots &  \\
+    & & & L_{n}
+\end{bmatrix}
+\]
+
+Where each $L_i$ is the Laplacian of the subgraph that only contains cluster $i$. From here, we notice that the eigenvectors of $L$ will simply be those that correspond to those of each of the $L_i$ with 0s filling up the entries that do not correspond to the $L_i$ matrix entries. By the preceding thereom, we know that each of these Laplacians have an eigenvector of $\mathbbm{1}$ corresponding to the eigenvalue 1, meaning that the multiplicity of the eigenvalue 1 relates to how many block entries there are in this Laplacian matrix, which precisely corresponds to the number of clusters there are. 
+
+We now wish to understand how to go about using such eigenvectors to accomplish clusterings. Specifically, to do so, consider once again the idealized case. In creating a matrix of these $k$ eigenvectors corresponding to the clusters as columns, we are left with a matrix of the form (where we are depicting the matrix as if the clusters are all of size 2):
+
+$$ M = [\mathbbm{1}_{A_1}^T,\mathbbm{1}_{A_2}^T,\dots,\mathbbm{1}_{A_k}^T] = 
+\begin{bmatrix}
+    1 & 0 & \dots & 0 \\
+    1 & 0 & \dots & 0 \\
+    0 & 1 & \dots & 0 \\
+    0 & 1 & \dots & 0 \\
+    \vdots & \vdots & \ddots & \vdots \\
+    0 & 0 & \dots & 1
+\end{bmatrix}
+$$
+
+From here, we simply notice that there are precisely as many rows as there were originally vertices in the graph, since each row corresponds to an eigenvector, which corresponded to the Laplacian matrix. Noticing that, it becomes clear that these vertices can now be trivially clustered using the k-means algorithm with perfect accuracy. Thus, the main takeaway from this example is understanding that the eigenvectors corresponding to eigenvalues of lowest magnitude essentially help transform the vertices into a new space that much more closely correspond to their associated cluster, from which the k-means algorithm can trivially be employed to complete clustering. The eigenvectors with lowest eigenvalues are employed as they will be closest to the idealized $\mathbbm{1}_{A_i}$ vectors. In addition, the remaining eigenvalues will be well separated from this set of low-magnitude eigenvalues. As a result, this points to a natural method by which we can estimate the number of clear clusters, namely by determining how many eigenvalues are near 0 prior to there being a jump in magnitude, as portrayed in Figure \ref{fig:spectral_example}.
+
+\begin{figure}
+    \label{fig:spectral_example}
+    \centering
+    \includegraphics[width=0.4\textwidth]{spectral_example.png}
+    \caption{The top left is a histogram of the data spread and the remainder of the picture corresponds to the eigenvalues and eigenvectors of the Laplacian, as discussed in the exposition. From this, it is clear that a well-separated dataset has a marked jump from the eigenvalues corresponding to the the clusters and the remaining ones \cite{spectral}.}
+\end{figure}
+
+This procedure is summarized in the presentation of Algorithm \ref{alg:spectral-kmeans}. Note that their conception of spectral clustering involves beginning with a similarity matrix, namely a symmetric matrix where entry $S_{ij}$ corresponds to some notion of ``similarity" between vertices $i,j$. It is from this matrix that a similarity graph is \textit{constructed} and its Laplacian determined. There exist many ways by which such a similarity graph can be constructed. As enumerated in \cite{spectral}, three such ways are as follow:
+
+\begin{itemize}
+    \item \textbf{$\epsilon$-neighborhood graph}: Connect vertices together if the similarity metric defined between the two of them exceeds some threshold parameter value of $\epsilon$. That is to say, the adjacency matrix will have edges according to $\mathbbm{1}_{e_{ij}>\epsilon}$.
+    \item \textbf{$k$-nearest neighbors}: Connect a given vertex to its $k$ nearest neighbors in sense defined by the similarity metric, i.e. create an edge for the vertices corresponding to the $k$ highest similarity measures. While this is normally asymmetric, simply avoid this problem by creating an undirected edge between the two vertices. That is to say, an edge between $v_i,v_j$ will be present if \textit{either} $v_j$ is one of the $k$-nearest neighbors for $v_i$ or vice versa (or both).
+    \item \textbf{Fully-connected graph}: Connect all edges, weighting the edges with some similiarity function, i.e. a Gaussian $G(v_i,v_j) = \text{exp}\left(e^{-\frac{|| v_i - v_j ||^2}{2\sigma^2}}\right)$
+\end{itemize}
+
+The procedure, therefore, thereafter is held as described above. For our particular case, we elect to use the third method of catering a similarity graph, although future elaborations on this work may expand this assumption and attempt other methods to determine their relative success. 
+
+\begin{algorithm}
+    
+\caption{Constructs Laplacian from the similarity matrix}\label{alg:laplacian}
+\begin{algorithmic}[1]
+\Procedure{ConstructLaplacian(S,k)}{} \\
+\textbf{Input:} Similarity matrix $S\in\mathbb{R}^{n\times n}$ \\
+\textbf{Input:} Cluster count $k$
+
+\State $G \gets \text{Simliarity graph for } S$
+\State $W\in\mathbb{R}^{n\times n} \gets \text{Weighted adjacency matrix for } G$ \\
+\State $L \gets D - W$ \\
+
+\textbf{Output:} Laplacian matrix $L$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{K-means based spectral clustering \cite{spectral}}\label{alg:spectral-kmeans}
+\begin{algorithmic}[1]
+\Procedure{SpectralClustering-Kmeans(S,k)}{} \\
+\textbf{Input:} Similarity matrix $S\in\mathbb{R}^{n\times n}$ \\
+\textbf{Input:} Cluster count $k$
+
+\State $L \gets ConstructLaplacian(S,k)$
+\State $v_1,v_2,...,v_k \gets \text{first } k \text{ (sorted by } \lambda_i \text{) eigenvectors of } L$
+\State $V\in\mathbb{R}^{n\times k} \gets [v_1^T, v_2^T,\dots,v_k^T]$
+\State $(y_i)_{i=[1:k]} \gets V^T_{i,:} \text{ (i.e. row } i \text{of } V\text{)}$
+\State $(C_i)_{i=[1:k]} \gets kmeans((y_i)_{i=[1:k]})$ \\
+\textbf{Output:} $(C_i)_{i=[1:k]}$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+In addition to this procedure, however, there is another which relies on a different principle, albeit still related to the spectrum of the Laplacian matrix. In this alternate approach, the ``eigenvector $u_2$ corresponding to $\lambda_2$ (the second-smallest eigenvalue) is computed, and the vertices of the graph are partitioned according to the values of their corresponding entries in $u_2$" \cite{bisection}. In other words, the second eigenvector is computed and used to partition the graph into two (or three) sections, specifically corresponding to the signs of the entries of the eigenvector. This process can be subsequently repeated a number of times to achieve the desired number of $k$ clusters. Further iterations of the algorithm are selected on the basis of their second eigenvalue, namely by determining that which has the lowest eigenvalue, since this effectively corresponds to how well separable the cluster is.
+
+Returning to the previous example at hand, namely the idealized case, intuition for this algorithm becomes clear. Specifically, we have that the eigenvector of the first eigenvalue (which \textit{always} corresponds to an eigenvalue of 0) will simply be $\mathbbm{1}$, meaning there is no information contained in its entries that allow for separation. Instead using the second eigenvector, we have something of the form $[\mathbbm{0}_{A_1},\dots\mathbbm{0}_{A_{k-1}},\mathbbm{1}_{A_k},\dots\mathbbm{0}_{A_n}]$. In this case, we see that partitioning by sign would effetively separate a cluster ($A_k$ in this particular instance) from the remainder of the graph. Presumably, in the following iteration, the second eigenvalue corresponding to the subgraph of $\mathcal{G}\\A_k$ will be less than that of $A_k$, meaning it will be partitioned in the following iteration. Once again, the second lowest eigenvalue is chosen as it roughly demonstrates the corresponding cluster is the closest to the idealized separable case of all those present in the graph. We refer to this version of spectral clustering as ``hierarchical," as it involves repeated bisection and employs a top-down separation method as contrasted with the k-means spectral implementation, which clusters all vertices at once. It seems natural, therefore, that hierarchical will be more accurate but significantly slower, due to its more careful handling of separation, than its k-means counterpart, a trend we investigate more fully empirically. This procedure is fully summarized in Algorithm \ref{alg:spectral-hierarchical}. 
+
+\begin{algorithm}
+\caption{Hierarchical based spectral clustering \cite{spectral}}\label{alg:spectral-hierarchical}
+\begin{algorithmic}[1]
+\Procedure{SpectralClustering-Hierarchical(S,k)}{} \\
+\textbf{Input:} Similarity matrix $S\in\mathbb{R}^{n\times n}$ \\
+\textbf{Input:} Cluster count $k$
+
+\State $C \gets [G]$
+\For {$i=1:k-1$}
+    \State $\lambda_{min} \gets None$, $v_{min} \gets None$, $j_{min} \gets None$
+    
+    \For {$j=1:len(C)$}
+        \State $W\in\mathbb{R}^{n\times n} \gets \text{Adjacency matrix for } C[i]$
+        \State $L_i \gets D_i - W_i$
+        \State $\lambda_2,v_2\gets\text{2nd eigenvalue, eigenvector of } L_i$
+        \If {$\lambda_2 < \lambda_min$}
+            \State $\lambda_{min} = \lambda_2$
+            \State $v_{min} = v_2$
+            \State $j_{min} = j$
+        \EndIf
+        
+        \State $C_{new} = [Set(),Set()]$
+        \For {$k=1:len(v_{min})$}
+            \If {$v_{min}[k] > 0$}
+                $C_{new}[0].add(v_min[k])$
+            \Else
+                $C_{new}[1].add(v_min[k])$
+            \EndIf
+        \EndFor
+        
+        \State $C[j_{min}] \gets C_{new}$
+    \EndFor
+    
+\EndFor
+
+\textbf{Output:} $C$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+Thus, having discussed spectral clustering, we briefly discuss its role in this investigation. Spectral clustering represents one of the major departures from previous studies that we wished to bring forward to this investigation, since it markedly involves attempting to perform clustering in a higher dimensional space, capable of capturing non-planar clusters. This contrasts previous studies, whose clustering, by virtue of directly working with the transaction graphs, cannot obtain any results that are non-planar. Hence, we wish to observe whether any clusters are more easily discernable under the mapping produced in spectral clustering as compared to their planar counterparts.
+
 \subsubsection{DBSCAN}
+DBSCAN is markedly different from the previous two algorithms in that it expressly seeks to provide an algorithm that does not need a number of clusters to be supplied. Much in the way spectral clustering could be used to estimate the number of clusters using a ``separation gap," DBSCAN similarly relies on two user-supplied parameters that effectively serve as the thresholds to be considered as part of the same cluster, though the manner in which these parameters serve as a threshold is slightly more involved. Prior to diving more in depth about its inner workings, DBSCAN additionally makes it an explicit goal to not necessarily cluster all vertices. That is to say, many of the vertices may end in a state of being in an ``undefined" category with respect to how it clusters. This is quite natural, in that there are often circumstances where vertices are simply shoehorned into a particular premade cluster simply because it is the best of the available options when in reality it is clear said vertex does not fit well in \textit{any} of these clusters.
+
+Returning to the algorithm at hand, the user-supplied parameters are typically denoted as $\epsilon$ and $minPts$. From this parameter of choice, a set of ``core points" $[p_i]$ become defined, where a core point is any point $p\in G$ such that there are $\ge minPts$ other points $q$ such that the distance $d_{pq} < \epsilon$. That is to say, a core point essentially captures the intuitive notion of vertices that are ``central" in the graph, i.e. are well-connected to a significant number of other vertices in the graph. From there, we define one vertex $v_B$ being \textit{directly} reachable from another $v_B$ if the other vertex is a distance $d_{AB} < \epsilon$. We now define an arbitrary vertex $v_B$ as being reachable from another $v_A$ if there is a path of pairwise directly reachable core points that terminate in $v_B$. This is more clearly illustrated in Figure \ref{fig:dbscan}.
+
+To finally construct the clusters, we simply go through the set of core points and find all other vertices that are reachable from these seeds. If a vertex is not reachable from any core points, it is simply remains unclustered in the final result \cite{dbscan}.
+
+\begin{figure}
+    \label{fig:dbscan}
+    \centering
+    \includegraphics[width=0.4\textwidth]{dbscan.png}
+    \caption{Here the $minPts=4$. Red points correspond to the core points, yellow those that are reachable from core points, and blue that not reachable from any. Thus, in this case, all the vertices would be clustered together with the exception of the blue vertex \cite{wiki-dbscan}.}
+\end{figure}
+
+The main advantage of DBSCAN is that it is extremely well suited for large-scale clustering. DBSCAN additionally is capable of capturing non-flat cluster geometry, similar to spectral clustering, due to its ability to capture long-link separated clusters. Thus, it provides a means of clustering that effectively takes the superior speed of k-means and clustering flexibility of spectral into a single algorithm. Unfortunately, DBSCAN is extremely sensitive to its parameters, and its choice is oftentimes non-obvious, as it holds little semantic meaning outside of the context of the algorithm itself.
+
+To summarize, we present these strengths and necessary parameters of the different vanilla algorithms considered in the previous sections of the background in Table \ref{tab:algs}. Note that these results were as implemented by scikit-learn, meaning there could be variations of the implementations of these algorithms that see parameter use differently.
+
+\begin{table}[]
+\centering
+\caption{Summary of clustering algorithms \cite{scikit}.}
+\label{tab:algs}
+\begin{tabular}{llll}
+\textbf{Method name} & \textbf{Parameters} & \textbf{Scalability}                                                                                     & \textbf{Use Case}                                                                                                   \\ \hline
+K-Means              & number of clusters  & \begin{tabular}[c]{@{}l@{}}Very large n\_samples, medium \\ n\_clusters with Minibatch code\end{tabular} & \begin{tabular}[c]{@{}l@{}}General purpose, even cluster size, \\ flat geometry, not too many clusters\end{tabular} \\
+Spectral clustering  & number of clusters  & \begin{tabular}[c]{@{}l@{}}Medium n\_samples, \\ small n\_clusters\end{tabular}                          & \begin{tabular}[c]{@{}l@{}}Few clusters, even cluster size, \\ non-flat geometry\end{tabular}                       \\
+DBSCAN               & neighborhood size   & \begin{tabular}[c]{@{}l@{}}Very large n\_samples, \\ medium n\_clusters\end{tabular}                     & \begin{tabular}[c]{@{}l@{}}Non-flat geometry, uneven \\ cluster sizes\end{tabular}                             
+\end{tabular}
+\end{table}
+
+\subsection{Clustering Evaluation}
+Having discussed these clustering methods, it seems natural that there be a metric by which they can be compared. This seemingly trivial property, however, is not completely obvious in its definition as may seemingly be the case upon first glance. Specifically, we assume for the sake of this discussion that there is some known ground truth clustering of the vertices. Unlike the DBSCAN assumption, we further assume that \textit{all} vertices are associated with one (and exactly one) cluster of the ground truth. 
+
+Having said that, there emerge four natural metrics of evaluating clustering, per \cite{evaluation}. The notation employed by this resource, and that which we extend for the remainder of this section, is `` $\Omega = \{ \omega_1, \omega_2, \ldots, \omega_K \}$is the set of clusters and $\mathbb{C} = \{ c_1,c_2,\ldots,c_J \}$  is the set of classes" \cite{evaluation}. In other words, $\Omega$ corresponds to the guessed clusters while $C$ is the set of ground truth clusters, which are referred to as ``classes." 
+
+The first metric is referred to as \textit{purity} and is defined as:
+
+$$ \text{purity}( \Omega,\mathbb{C} ) = \frac{1}{N} \sum_k \max_j \vert\omega_k \cap c_j\vert $$
+
+Roughly, the intuition behind purity is that a clustering with high purity has clusters such that the elements that are clustered together are in truth originating from the same class. In other words, an impure clustering would have clusters with vertices of differing classes, whereas a perfect clustering would have a purity of 1.0. It follows that as $k\rightarrow\infty$, the purity will tend towards 1.0 and will be exactly so once $k=n$. In other words, once there are sufficiently many clusters that each vertex gets associated to its own cluster, the purity there and for any higher values of $k$ will be 1.0. Thus, this metric, while useful in ascertaining the overlap with the true classification, suffers from generally improved ``performance" as the granularity increases. 
+
+Another metric is the ``normalized mutual information or NMI:
+
+$$ \text{NMI}(\Omega , \mathbb{C}) = \frac{ I(\Omega ; \mathbb{C}) } { [H(\Omega)+ H(\mathbb{C} )]/2 } $$
+
+[where] $I$ is mutual information
+
+\begin{align}
+I( \Omega ; \mathbb{C} ) &= \sum_k \sum_j P(\omega_k \cap c_j) \log \frac{P(\omega_k \cap c_j)}{P(\omega_k)P(c_j)} \\
+&= \sum_k \sum_j \frac{\vert\omega_k \cap c_j\vert}{N} \log \frac{N\vert\omega_k \cap c_j\vert}{\vert\omega_k\vert\vert c_j\vert}
+\end{align}
+
+where $P(\omega_k)$, $P(c_j)$, and $P(\omega_k \cap c_j)$ are the probabilities of a document being in cluster $\omega_k$, class $c_j$, and in the intersection of $\omega_k$ and $c_j$, respectively... $H$ is entropy as defined...:
+
+\begin{align}
+H(\Omega) &= -\sum_k P(\omega_k) \log P(\omega_k)
+&= -\sum_k \frac{\vert\omega_k\vert}{N} \log \frac{\vert\omega_k\vert}{N}
+\end{align}
+
+where...the second equation is based on maximum likelihood estimates of the probabilities" \cite{evaluation}. Having presented this metric, it serves well to parse the definition. The intuition behind this metric becomes more evident in understanding the notions of mutual information and entropy separately. In fact, the latter is simply a special case of the former, where $H(\Omega) = I(\Omega,\Omega)$. Returning to mutual information, this measures the gain in information from being presented a new piece of information. Intuitively, it is the reduction in uncertainty of the state of some random variable $B$ by learning that for some r.v. $A$. In this particular case, it is measuring the extent to which knowing our guessed clusters helps in knowing the class. Clearly, in the case of a perfect reconstruction of the true clustering, knowing our guess will greatly increase our knowledge of the class, whereas an ill-formed guess will give no bearing as to what the true class is.
+
+It, once again, follows that the mutual information increases to its max value as $k\rightarrow\infty$, namely once there are sufficiently many clusters to assign one per vertex. Taking an aside, as previously discussed, if we are able to recreate the ground truth clusters perfectly, the maximum value of MI is achieved. However, by looking at the definition, it becomes clear that if these clusters are further subdivided, the resulting MI remains the same. That is to say, if we have one additional cluster than the number present in the ground truth but the clusters $C_1,\dots,C_{n-1}$ correspond exactly to those in the truth and $C_n,C_{n+1}$ correspond to the underlying $n$th true cluster, the MI will still be maximized. In particular, this means in the case of each vertex being assigned to its own cluster, as this is a refined clustering of the ground truth, the max MI will \textit{also} be attained in this case. Thus, to combat this issue, we normalize by the entropy, which ``tends to increase with the number of clusters" \cite{evaluation}. Thus, by combining these two into a single NMI metric, we are able to effectively measure that the correct number of clusters were extracted in addition to the contents of the clusters being correctly formed.
+
+The final two metrics are directly related to one another, with thie third simply being a special case of the fourth. This metric, known as the Rand index, is, in fact, the simplest to present and interpret. We simply consider all $n(n-1)/2$ pairs of vertices and calculate:
+
+$$ RI = \frac{TP + TN}{TP + TN + FP + FN} $$
+
+Where TN, TP, FP, and FN are respectively the true negative, true positive, false positive, and false negative classifications that were made. Thus, if a pair of vertices were clustered togethered when they were in the same class in reality, this would be a TP, whereas, if they were not in reality, this would be an FP. The TN and FN are similarly defined if a pair of vertices are clustered separately. Thus, this metric is simply the ``total correct" of the total pairwise predictions being made. Clearly, the main limitation in this formulation of a metric is that it weighs FN and FP errors equally. While this may occasionally be the case, it is not so for us, as discussed by the previous works in deanonymization, wherein even a small number of false positives cause the collapse of the entire graph into a single supercluster. It would, therefore, seem quite natural to assume FN should be penalized less harshly as contrasted to FP in our case.
+
+Extending to include this simply adjustment is quite straightforward, using the well-known F measure from statistics:
+
+\begin{align}
+P &= \frac{TP}{TP+FP} \\
+R &= \frac{TP}{TP+FN} \\
+F_{\beta} &= \frac{(\beta^2+1)PR}{\beta^2 P+R}
+\end{align}
+
+Where false positives would be weighted more heavily for small values of $\beta$, namely $\beta<1$ \cite{evaluation}. Having discussed these metrics by which clustering can be evaluated, we turn to specific techniques employed for the study herein due to the massive scale of the data at hand.
 
 \subsection{Matrix Estimation}
+As mentioned previously, the scale of the BTC transaction graph is massive, making the application of vanilla clustering algorithms practically impossible should we wish to achieve any sensible predictions. Note that, while the heuristics graph contains information of a different nature than the transaction graph, it is roughly the same order of magnitude of scale. While each heuristic likely only applies to a select subset of the entire of graph vertices, the introduction of all the heuristics, each of which less rigid and certain than those originally conceived, made it such that a comparable number of edges exist in the heuristics graph. To get a sense of scale, the graph to be clustered had roughly 200 million vertices and 10 billion edges, roughly corresponding to 180 GB of disk space. Thus, in addition to requiring far too much time to execute, handling the data all at once would require all this be stored in memory, meaning we had to determine approaches that either handled execution of clustering in some online setting or an approximated form. We discuss the former in this and the following section and the latter in the final two sections of the Background.
+
+We now briefly discuss the basic concepts behind matrix estimation. Though the main concepts presented in this section do no directly come up in the investigation herein, they form the basis for some the online clustering algorithms presented in the following section, making this information still relevant to understand. Clearly, ``the optimal low rank approximation for any matrix is obtained by its truncated Singular Value Decompositions (SVD)," as this is precisely the result obtained in solving the corresponding Rayleigh Quotient problem \cite{sketch}. It, therefore, may seem unnecessary for any other estimation methods to be developed, seeing as the \textit{optimal} estimation for any arbitrary lower dimension is already known. However, the need becomes apparent in observing ``Data matrices...[that are] extremely large and distributed across many machines...render standard SVD algorithms infeasible" \cite{sketch}.
+
+Towards this end, our particular application has the former property, wherein the data is too massive to perform an SVD. Matrix sketching is one such alternate approximation method. ``There are three main matrix sketching approaches...The first generates a sparser version of the matrix...The second approach is to randomly combine matrix rows.... The third sketching approach is to find a small subset of matrix rows (or columns) that approximate the entire matrix" \cite{sketch}. In other words, all methods of matrix sketching seek to construct some smaller matrix by directly manipulating the original matrix rows. Unlike the procedure of extracting vectors from SVD, there are no additional computations required herein with the exception of manipulations performed on the initial original matrix rows. The paper additionally ``proposes a fourth approach. It draws on the similarity between the matrix sketching problem and the item frequency estimation problem" \cite{sketch}.
+
+They specifically provide two methods that fall into this classification of matrix sketching, though the specifics of their inner workings are not of relevance to this study. The idea revolves around extending a clever approximation algorithm that solves the seemingly unrelated problem of estimating the count of $m$ distinct items as they appear in a data stream while using less memory than that required to have a counter per item. Specifically, their matrix sketching technique views the rows of a matrix as ``items." To gain an intuitive understanding, consider the simplified case where the matrix \textit{only} contains $e_i$ vectors, i.e. the standard $\mathbb{R}^n$ basis vectors. In this case, by applying this ``frequency counter" idea, we can construct a matrix of the basis vectors that appeared with greatest frequency, which effectively captures an approximation of the original matrix.
+
+The main issue in this arises in considering a matrix with rows of differing magnitudes and multiple non-zero entries. For example, the frequency counter when applied to a matrix whose first row is $\mathbbm{1}_n$ and second is $2\mathbbm{1}_n$ would view the two as completely distinct, when they point in the same direction in reality and, therefore, should add to some common counter for a third average row vector. Towards that end, the authors therein considered a refinement of the frequency counter they dubbed ``frequent-directions," which seeks to solve this very issue. We defer to their paper for full presentation of detail, as this understanding suffices for our purposes.
+
 \subsection{Online Clustering}
+Having presented this brief background on matrix approximation, we turn to the first method considered in performing clustering on the massive heuristic graph, namely that of performing online graph clustering. Of course, we use the term ``online" in the traditional statistical sense, wherein the analysis is to be performed as data arrives rather than all at once, in a single process after the data has been fully collected. This has a natural correspondence to our setting, assuming Blocksci is used to procure the data incrementally. In viewing our problem as an online clustering problem, we will have data that arrives that adds new data points, i.e. when we encounter a node who is exchanging BTC for the first time, and changing of weights of previously present nodes, i.e. when a heuristic is predicted as being true for a previously seen node that was previously marked false or vice versa. Thus, the online scheme employed \textit{must} be capable of adapting to both the addition and changing of previously seen data points, though handling of deletion is unnecessary, as a vertex will permanently remain in the graph after first being encountered.
+
+We additionally discuss why some of the algorithms presented and discussed here could not be applied in their originally presented form to the case at hand. All the algorithms presented are online versions of spectral clustering. We discuss two variations thereof, namely the streaming setting and evolutionary setting. Much work has been done in the realm of streaming clustering, as fully discussed in \cite{streaming} and \cite{eigen-update}. Having said that, the reason these algorithms fail to meet the demands of the task at hand is because none of them support the change of weights required for our purposes. That is to say, while they perform clustering on data streams, they assume such streams are simply the addition of new data points rather than relating to those that already exist.
+
+Towards that end, an alternate dubbed ``evolutionary clustering" has arisen that seeks to fill this gap where weights can be newly created or changed from preexisting values. The main work in this space is \cite{incremental}, which states ``our approach is the first work accomplishing the task of incremental spectral clustering that can handle not only insertion/removal of data points but also similarity changes...Evolutionary clustering simultaneously optimizes two potentially conflicting criteria, i.e., the clustering should fit the current data as much as possible, while should not deviate dramatically from the historic context." This, therefore, fits our setting quite well, with one exception, namely that of temporally smoothness. While it is generally the case that temporal smoothness is a desirable property, especially where the data itself is modelling a process that itself is evolving in nature, this context does not fit that description. Specifically, the act of two vertices corresponding to the same person is not a continuous process; it is simply a binary fact about which we have information arriving incrementally. In other words, it is very possible, and almost certainly the case, that up until some transaction $t$, vertices $v_A,v_B$ will be thought to correspond to two different clusters/people but transaction $t$ shows $v_A,v_B$ both as inputs, meaning (by Heuristic 1 previously discussed) we would want to \textit{always} consider these two as being in the same cluster thereafter. In other words, there was a distinct jump from \textbf{not} being in the same cluster to being clustered together at time \textit{t}. To avoid this issue, however, the evolutionary clustering techniques employed have a tunable weight parameter that determines the extent to which temporal smoothness is desired, for which we would simply set an extremely low value.
+
+The algorithm, therefore, relies on incremental updating to both the eigenvalues and eigenvectors of the Laplacian as would naturally be the case for updating spectral clustering. We specifically refer to the results and algorithms catered in \cite{incremental}, which found:
+
+\begin{align}
+    \Delta v_{ij} = (K^T_{\mathcal{N}_{ij}} K_{\mathcal{N}_{ij}})^{-1} K_{\mathcal{N}_{ij}} \textbf{h}\label{eq:delta-v}
+\end{align}
+
+Where (for an eigenvector $\textbf{v}$ and some fixed threshold $\tau$):
+
+\begin{align}
+    K = L - \lambda D \\
+    \textbf{h} = (\Delta\lambda D + \lambda \Delta D - \Delta L)\textbf{v} \\
+    \mathcal{N}_{ij} = \{k|w_{ik} > \tau \text{ or } w_{jk} > \tau\}
+\end{align}
+
+\begin{align}
+    \Delta\lambda = \Delta w_{ij}\frac{a + b}{1 + c + d}\label{eq:delta-lambda}
+\end{align}
+
+Where ($v_i$ denoting the $i$th component of $v$ and $d_k$ is degree of vertex $k$):
+
+\begin{align}
+    a = (v_i - v_j)^2 - \lambda(v_i^2 + v_j^2) \\
+    b = (v_i - v_j)(\Delta v_i - \Delta v_j) - \lambda(v_i\Delta v_i + v_j\Delta v_j) \\
+    c = \Delta w_{ij}(v_i^2 + v_j^2) \\
+    d = \sum_{k\in\mathcal{N}_{ij}} q_k d_k\Delta q_k
+\end{align}
+
+Having defined these update functions, we provide the final algorithm that was developed, namely in \ref{alg:spectral-iterative}.
+
+\begin{algorithm}
+\caption{Refinement of $\Delta\lambda$ and $\Delta v$ \cite{incremental}}\label{alg:refinement}
+\begin{algorithmic}[1]
+\Procedure{Refine($\lambda, v, D, \Delta D, L, \Delta L, \Delta W$)}{} \\
+\textbf{Input:} Current eigenvalue $\lambda$ \\
+\textbf{Input:} Current associated eigenvector $v$ \\
+\textbf{Input:} Previous time-step degree matrix $D$ \\
+\textbf{Input:} Time-step degree matrix update $\Delta D$ \\
+\textbf{Input:} Previous time-step Laplacian matrix $L$ \\
+\textbf{Input:} Time-step Laplacian matrix update $\Delta L$ \\
+\textbf{Input:} Time-step weight matrix update $\Delta W$
+
+\State $\Delta v \gets 0$
+\While $\Delta v, \Delta\lambda \text{ not stabilized}$
+    \State $\Delta\lambda \gets$ \ref{eq:delta-lambda} using current $\Delta v$ 
+    \State $\Delta v \gets$ \ref{eq:delta-v} using current $\Delta \lambda$ 
+\EndWhile
+
+\textbf{Output:} $\Delta v, \Delta\lambda$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Iterative (online) spectral clustering \cite{incremental}}\label{alg:spectral-iterative}
+\begin{algorithmic}[1]
+\Procedure{SpectralClustering-Iterative(D,k)}{} \\
+\textbf{Input:} Data stream (individual vertices with heuristics) $D$ \\
+\textbf{Input:} Cluster count $k$
+
+\State $t \gets\text{ time enough data points to define } W, L, D$
+\State $G \gets \emptyset$
+\For {$i=1:t$}
+    \State $G \gets S[i] \text{update vertices/edges}$
+\EndFor
+
+\State $W\gets W(G), L\gets L(G), D\gets D(G)$
+\State $[v_i], [\lambda_i] \gets eigendecomp(L)$
+\While {$S[j] \text{not null}$}
+    \State $i \gets \{v_i|S[j]_i > 0\}$
+    \State $\Delta W\gets W - S[j] e_i$
+    \State $\Delta D\gets D - S[j] e_i$
+    \State $L\gets \Delta W + \Delta D$
+    \State $\Delta v_i, \Delta \lambda_i \gets Refine(\lambda_i, v_i, D, \Delta D, L, \Delta L, \Delta W)$
+    \State $Update(W,D,L,v_i,\lambda_i)$
+\EndWhile
+
+\State $V\in\mathbb{R}^{n\times k} \gets [v_1^T, v_2^T,\dots,v_k^T]$
+\State $(y_i)_{i=[1:k]} \gets V^T_{i,:} \text{ (i.e. row } i \text{of } V\text{)}$
+\State $(C_i)_{i=[1:k]} \gets kmeans((y_i)_{i=[1:k]})$ \\
+
+\textbf{Output:} $C$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+Thus, in this way, an online implementation of spectral clustering was developed and applied to the context of BTC wallet deanonymization.
+
 \subsection{Graph Sparsification}
+The second method to employ for our purposes are directly approximating the graph. Namely, rather than performing the clustering on the original heuristic graph $\mathcal{G}$, we could procure some related graph $\mathcal{G}'$, such that, after clustering is performed on this related graph, the clustering could naturally be extended to the original $\mathcal{G}$. Towards that end, we look to both graph sparsification and coarsening; both seek to produce a $\mathcal{G}'$ that is both simpler than and similar to the original $\mathcal{G}$, in some sense defined by the particular method employed. Sparsification seeks to produce a simpler graph by removing edges of the original graph, whereas coarsening seeks to do so by removing vertices.
+
+As we discussed in the previous sections, namely in that regarding spectral clustering, information of the separation of clusters is inherently present in the spectrum of the corresponding Laplacian matrix. It, therefore, seems reasonable to perform graph approximation with the express goal of retaining a Laplacian matrix as close to the original as possible. What is meant by ``close" is once again ambiguous by the various matrix metrics that are typically employed. Towards that end, we use what has become the standard, namely the notion two matrices being $\sigma-$spectrally similar. Prior to defining this notion, we introduce some associated notation, namely:
+
+$$ A \preceq B \implies x^T Ax \le x^T Bx \forall x $$
+
+Having introduced that, ``We say $A$ and $B$ are $\sigma-$spectrally similar if:
+
+$$ B / \sigma \preceq A \preceq \sigma\cdot B $$" \cite{spectral-sparse}.
+
+This notion of matrices being $\sigma$-spectrally similar, while well-defined, is not immediately applicable to graphs. We, therefore, discuss an equivalent formulation thereof that directly resolves this opaque application. Specifically, the ``Courant-Fisher Theorem tells us that:
+
+$$ \lambda_i(A) = \max_{S:\text{dim}(S)=i} \min_{x\in S} \frac{x^T Ax}{x^T x} $$
+
+Thus, if $\lambda_1,\dots,\lambda_n$ are the eigenvalues of $A$ and $\widetilde{λ_1},\dots,\widetilde{\lambda_n}$ are the eigenvalues of $B$, then for all $i$, $\lambda_i / \sigma \le \widetilde{\lambda_i} \le \sigma\cdot\lambda_i$. Using this notation, we can now write inequality as:
+
+$$ L_{\widetilde{G}} / \sigma \preceq L_{G} \preceq \sigma \cdot L_{\widetilde{G}}$$
+
+That is, two graphs are $\sigma$-spectrally similar if their Laplacian matrices are" \cite{spectral-sparse}. Thus, any sparsification that retains $\sigma-$spectral similarity is greatly of interest for the purposes of obtaining a clustering that can directly applied to the original graph. Towards that end, a method dubbed spectral sparsification was procured that seeks to sparsify edges and produce a $\sigma-$spectrally similar graph, with a $\sigma$ tightly bounded from above. This process ``involves assigning a probability $p_{u,v}$ to each edge $(u, v)\in G$ and then selecting edge $(u, v)$ to be in the graph $\widetilde{G}$ with probability $p_{u,v}$. When edge $(u, v)$ is chosen to be in the graph, we multiply its weight by $1/p_{u,v}$. This procedure guarantees that:
+
+$$ \mathbb{E}[L_{\widetilde{G}}] = L_{G} $$" \cite{spectral-sparse}
+
+In fact, the only step of this process that needs further detailing is the assignment of such probabilities $p_{u,v}$. Of course, assigning a lower probability will result in an overall sparser graph, yet doing so also loses information. Thus, the choice of $p_{u,v}$ represents balancing the desire to produce a simpler graph against that of producing one that contains most of the information that was present in the original graph. For this fact, however, a theorem was demonstrated in this same paper:
+
+\begin{theorem}
+Suppose $\epsilon\in(0,1/2)$ and $G = (V, E)$ is an unweighted graph with smallest non-zero normalized Laplacian eigenvalue at least $\lambda$. Let $\widetilde{G} = (V, \widetilde{E}, \widetilde{w})$ be a graph obtained by sampling the edges of $G$ with probabilities:
+
+$$ p_e = \min (1,C/\min(d_u, d_v)) $$
+
+for each edge $e = (u,v )$, where: 
+
+$$ C = \Theta ((\log(n))^2 (\epsilon\lambda)^{-2} ) $$
+
+and setting weights $\widetilde{w}_{(e)} = 1/p_e$  for $e\in\widetilde{E}$. Then, with probability at least $1/2$, $\widetilde{G}$ is a $(1 + \epsilon)$-spectral approximation of $G$, and the average degree of $\widetilde{G}$ is $O((\log(n))^2 (\epsilon\lambda)^{−2} )$ \cite{spectral-sparse}
+\end{theorem}
+
+Thus, using this theorem, we can employ spectral sparsification on the graphs at hand to obtain a graph that is simpler to deal with for clustering. The sparsification of this matrix substantially reduces the memory consumption of the model, since there are much more efficient methods by which sparse matrices can be represented in most programming paradigms than the naive 2D array representation, making it feasible to deal with the entirety of this dataset when sparsified.
+
 \subsection{Graph Coarsening}
+In addition to dealing with space issues, developing a time-efficient means to cluster this data is of great importance. By directly reducing the count of vertices, graph coarsening produces a smaller graph, potentially making certain procedures feasible to run, such as eigendecomposition. Graph coarsening, unlike graph sparsification, seeks to simply clump different pieces of information into a single representation rather than removing unnecessary data. In other words, rather than simply removing vertices from a graph $G$ outright to produce $\widetilde{G}$, the process, alternatively referred to as edge contraction, typically involves coalescing two vertices $u,v$ such that the edges that independently had endpoints at either one now has an endpoint at this single combined vertex. In practice, this procedure is performed on weighted graphs, for which the collection of two edges into a single edge involves adding the weights for the initial two edges to find the resultant weight. Despite being a straightforward procedure, there exist two main variations on this process, referred to as SAG and WAG, respectively depicted in Figures \ref{fig:sag} and  \ref{fig:wag}. Roughly, the former correspond to aggregataing vertices by a strictly enforced threshold value, i.e. coalescing vertices $i,j$ if ``$w_{ij}$ is comparable to $\min\{\max_k(w_{ik}, \max_k(w_{kj})\}$" \cite{coarsening}. The latter corresponds to ``express[ing]  the likelihood of nodes belong[ing] together; these likelihoods will then accumulate at the coarser levels of the process" \cite{coarsening}. 
+
+\begin{figure}
+    \label{fig:sag}
+    \centering
+    \includegraphics[width=0.4\textwidth]{sag.png}
+    \caption{SAG (strict aggregation) assumes a strict threshold per which it is determined whether two vertices should be coalesced or not \cite{coarsening}.}
+\end{figure}
+
+\begin{figure}
+    \label{fig:wag}
+    \centering
+    \includegraphics[width=0.4\textwidth]{wag.png}
+    \caption{WAG (weighted aggregation), in contrast to SAG, determines the \textit{likelihood} for different vertices to be clustered together, whereby vertices can be iteratively aggregated with further levels of coarsening \cite{coarsening}.}
+\end{figure}
+
+Having discussed the specifics of the coarsening itself, we consider algorithms that specifically employ this technique. The main one that falls into this category is dubbed METIS, whose overall structure is as follows: ``The graph G is first coarsened down to a few hundred vertices, a bisection of this much smaller graph is computed, and then this partition is projected back towards the original graph (finer graph), by periodically refining the partition" \cite{metis}. In line with that, there are three main facets of this algorithm that necessitate discussion, specifically the coarsening, eventual clustering, and refinement of partitions during uncoarsening.
+
+\begin{figure}
+    \label{fig:metis}
+    \centering
+    \includegraphics[width=0.4\textwidth]{metis.png}
+    \caption{METIS relies on continual coarsening of the graph to a point where bisection or clustering is a relatively trivial problem and subsequently refining this partition as the graph is expanded back to its original size \cite{metis}.}
+\end{figure}
+
+To be precise, the objective of the coarsening phase is to construct a sequence of graphs $\{G_{l}\}$ such that $|V_{l}| > |V_{l+1}|$, where we denote the original graph $G_{0}=(V_0,E_0)$ \cite{metis}. In line with this, ``$G_{l+1}$ is constructed from $G_l$ by finding a maximal matching $M_l\subset E_l$ of $G_l$ and collapsing together the vertices that are incident on ea ch edge of the matching. In this process no more than two vertices are collapsed together because a matching of a graph is a set of edges, no two of which are incident on the same vertex" \cite{metis}. In line with the difference between SAG and WAG, there were multiple procedures discussed by which the maximal matching could be constructed, though it was found that the HEM ``heavy-edge matching..., [WHICH] computes a matching $M_l$, such that the weight of the edges in $M_l$ is high...produces consistently better results than RM [random matching], and the amount of time spent in refinement is less than that of RM" \cite{metis}.
+
+Having said that, we turn to the clustering section of the algorithm, referred to in Figure \ref{fig:metis} as the ``initial partitioning phase." Specifically, the algorithm supports ``four different schemes for partitioning the coarsest graph...Three of these algorithms are based on graph growing heuristics, and the other one is based on spectral bisection" \cite{metis}. For the purposes of this investigation, we decided to make use of spectral bisection, as this allowed for applying the results of experiments we conducted on the SBM initially. 
+
+From here arises the main spectacle of the METIS algorithm: the uncoarsening phase. Formally, this involves taking the partitioning sets $\{C^k_i\}$ that satisfy $\bigcup_i C_i = V_k$ and projecting them up through $G_{k-1},G_{k-2},...,G_1,G_0$, such that each $\{C^l_i\}$ satisfies $\bigcup_i C^l_i = V_l$. In other words, taking the partitioning of the coarsest graph and attempting to efficiently construct a partitioning that eventually contains all the vertices of the original graph.
+
+Towards that end, we can simply discuss how such a projection happens in a single step of the uncoarsening, from which the full process is fully defined. Specifically, a single step in this process begins with the natural projection up one level. That is to say, if two vertices $u,v$ were coalesced into a supernode $uv$ and said vertex $uv$ was clustered into class $A$, the natural projection simply involves $u,v$ similarly both being clustered into $A$. However, ``even if the partition of $G_l$ is at a local minima, the projected partition of $G_{l−1}$ may not be at a local minima. Since $G_{l−1}$ is finer, it has more degrees of freedom that can be used to further improve the partition and thus decrease the edge-cut. Hence, it may still be possible to improve the projected partition of $G_{l−1}$ by local refinement heuristics" \cite{metis}. In other words, while it is the case that the clustering in the coarser level minimizes the crossing edges, this property is not necessarily retaining in projecting up a level, due to the increased degrees of freedom. A ``refinement heuristic" here refers to one that takes ``two parts of the bisection [$A, B$ and]...selects $A'\subset A$ and $B'\subset B$ such that $A\backslash A' \cup B'$ and $B\backslash B' \cup A'$ is a bisection with a smaller edge-cut" \cite{metis}. The specific algorithm employed for this purpose was the Kernighan-Lin (KL) partition algorithm, though its details are not necessary to understand for our purposes.
+
+In this way, METIS is capable of performing partitioning on enormous graphs, namely by creating a mapping from a large graph to a significantly reduced graph and one from this reduced graph's clustering to that of the original graph. 
 
 \section{Methodology}\label{methodology}
+
 
 \section{Results}\label{results}
 
@@ -594,9 +1031,10 @@ We further assume that when referring to graph clustering, we wish to separate t
 
 \section{Conclusion}\label{conclusion}
 
-\newpage
+\clearpage
 \begin{thebibliography}{1}
 \bibitem{data-stream} Aggarwal, Charu C., et al. ``A Framework for Clustering Evolving Data Streams." Proceedings 2003 VLDB Conference, 2003, pp. 81–92., doi:10.1016/b978-012722442-8/50016-1.
+\bibitem{k-means} Arthur, David, and Sergei Vassilvitskii. ``k-Means++: The Advantages of Careful Seeding." \textit{Proceedings of the Eighteenth Annual ACM-SIAM Symposium on Discrete Algorithms}. Society for Industrial and Applied Mathematics, 2007. 
 \bibitem{spectral-sparse} Batson, Joshua, et al. ``Spectral Sparsification of Graphs." Communications of the ACM, vol. 56, no. 8, 2013, p. 87., doi:10.1145/2492007.2492029.
 \bibitem{coarsening} Chevalier, Cedric, and Ilya Safro. ``Comparison of Coarsening Schemes for Multilevel Graph Partitioning." Lecture Notes in Computer Science Learning and Intelligent Optimization, 2009, pp. 191–205., doi:10.1007/978-3-642-11169-3\_14.
 \bibitem{evolutionary-temporal} Chi, Yun, et al. ``Evolutionary Spectral Clustering by Incorporating Temporal Smoothness." Proceedings of the 13th ACM SIGKDD International Conference on Knowledge Discovery and Data Mining - KDD '07, 2007, doi:10.1145/1281192.1281212.
@@ -604,10 +1042,12 @@ We further assume that when referring to graph clustering, we wish to separate t
 \bibitem{scikit} ``Clustering." Scikit-Learn, scikit-learn.org/stable/modules/clustering.html.
 \bibitem{coinjoin} ``CoinJoin: Bitcoin Privacy for the Real World." Bitcoin Talk, 22 Aug. 2013, bitcointalk.org/index.php?topic=279249.0.
 \bibitem{dbscan} Daszykowski, M., and B. Walczak. ``Density-Based Clustering Methods." Comprehensive Chemometrics, 2009, pp. 635–654., doi:10.1016/b978-044452701-1.00067-3.
+\bibitem{wiki-dbscan} ``DBSCAN." \textit{Wikipedia}, Wikimedia Foundation, 19 Apr. 2018, en.wikipedia.org/wiki/DBSCAN. 
 \bibitem{eigen-update} Dhanjal, Charanpal, et al. ``Efficient Eigen-Updating for Spectral Graph Clustering." Neurocomputing, vol. 131, 2014, pp. 440–452., doi:10.1016/j.neucom.2013.11.015.
 \bibitem{automatic} Ermilov, Dmitry, et al. ``Automatic Bitcoin Address Clustering." 2017 16th IEEE International Conference on Machine Learning and Applications (ICMLA), 2017, doi:10.1109/icmla.2017.0-118.
 \bibitem{evaluation} ``Evaluation of Clustering." Stanford NLP, 2008, nlp.stanford.edu/IR-book/html/htmledition/evaluation-of-clustering-1.html.
 \bibitem{follow} Greenberg, Andy. ``Follow The Bitcoins: How We Got Busted Buying Drugs On Silk Road's Black Market." Forbes, Forbes Magazine, 7 Sept. 2013, www.forbes.com/sites/andygreenberg/2013/09/05/follow-the-bitcoins-how-we-got-busted-buying-drugs-on-silk-roads-black-market/\#79bb83c8adf7.
+\bibitem{bisection} Guattery, Stephen, and Gary L. Miller. ``On the Quality of Spectral Separators." \textit{SIAM Journal on Matrix Analysis and Applications}, vol. 19, no. 3, 1998, pp. 701–719., doi:10.1137/s0895479896312262. 
 \bibitem{heuristics} ``Heuristics." \textit{BlockSci 0.4.5 Documentation}, citp.github.io/BlockSci/heuristics/heuristics.html. 
 \bibitem{blocksci} Kalodner, Harry. ``BlockSci: Design and Applications of a Blockchain Analysis Platform." ArXiv Preprint, 2017, doi:1709.02489.
 \bibitem{metis} Karypis, George, and Vipin Kumar. ``METIS--Unstructured Graph Partitioning and Sparse Matrix Ordering System, Version 2.0." 1995.
@@ -629,9 +1069,11 @@ We further assume that when referring to graph clustering, we wish to separate t
 \bibitem{fast-kmeans} Shindler, Michael, et al. ``Fast and Accurate k-Means For Large Datasets.” Advances in Neural Information Processing Systems, 2011. 
 \bibitem{public-key} Shirriff, Ken. ``Ken Shirriff's Blog." Bitcoins the Hard Way: Using the Raw Bitcoin Protocol, www.righto.com/2014/02/bitcoins-hard-way-using-raw-bitcoin.html. 
 \bibitem{resistance} Spielman, Daniel A., and Nikhil Srivastava. ``Graph Sparsification by Effective Resistances." Proceedings of the Fourtieth Annual ACM Symposium on Theory of Computing - STOC 08, 2008, doi:10.1145/1374376.1374456.
+\bibitem{terry} Tao, Terrence. ``A Review of Probability Theory." \textit{Terry Tao}, terrytao.wordpress.com/2010/01/01/254a-notes-0-a-review-of-probability-theory/.
 \bibitem{virtual} Trautman, Lawrence J. ``Virtual Currencies: Bitcoin \& What Now after Liberty Reserve and Silk Road?" SSRN Electronic Journal, 2014, doi:10.2139/ssrn.2393537.
 \bibitem{blockchain-img} Wander, Matthaus. ``Bitcoin Block Data." Wikimedia Commons, 22 June 2013, commons.wikimedia.org/wiki/File:Bitcoin\_Block\_Data.png.
 \bibitem{scalable} Whang, Joyce Jiyoung, et al. ``Scalable and Memory-Efficient Clustering of Large-Scale Social Networks." 2012 IEEE 12th International Conference on Data Mining, 2012, doi:10.1109/icdm.2012.148.
+\bibitem{streaming} Yoo, Shinjae, et al. “Streaming Spectral Clustering.” 2016 IEEE 32nd International Conference on Data Engineering (ICDE), 2016, doi:10.1109/icde.2016.7498277. 
 \bibitem{ico} Zetzsche, Dirk A., et al. ``The ICO Gold Rush: It's a Scam, It's a Bubble, It's a Super Challenge for Regulators." SSRN Electronic Journal, 2017, doi:10.2139/ssrn.3072298.
 \end{thebibliography}
 
