@@ -1,378 +1,11 @@
-
-%% bare_jrnl.tex
-%% V1.3
-%% 2007/01/11
-%% by Michael Shell
-%% see http://www.michaelshell.org/
-%% for current contact information.
-%%
-%% This is a skeleton file demonstrating the use of IEEEtran.cls
-%% (requires IEEEtran.cls version 1.7 or later) with an IEEE journal paper.
-%%
-%% Support sites:
-%% http://www.michaelshell.org/tex/ieeetran/
-%% http://www.ctan.org/tex-archive/macros/latex/contrib/IEEEtran/
-%% and
-%% http://www.ieee.org/
-
-
-
-% *** Authors should verify (and, if needed, correct) their LaTeX system  ***
-% *** with the testflow diagnostic prior to trusting their LaTeX platform ***
-% *** with production work. IEEE's font choices can trigger bugs that do  ***
-% *** not appear when using other class files.                            ***
-% The testflow support page is at:
-% http://www.michaelshell.org/tex/testflow/
-
-
-%%*************************************************************************
-%% Legal Notice:
-%% This code is offered as-is without any warranty either expressed or
-%% implied; without even the implied warranty of MERCHANTABILITY or
-%% FITNESS FOR A PARTICULAR PURPOSE! 
-%% User assumes all risk.
-%% In no event shall IEEE or any contributor to this code be liable for
-%% any damages or losses, including, but not limited to, incidental,
-%% consequential, or any other damages, resulting from the use or misuse
-%% of any information contained here.
-%%
-%% All comments are the opinions of their respective authors and are not
-%% necessarily endorsed by the IEEE.
-%%
-%% This work is distributed under the LaTeX Project Public License (LPPL)
-%% ( http://www.latex-project.org/ ) version 1.3, and may be freely used,
-%% distributed and modified. A copy of the LPPL, version 1.3, is included
-%% in the base LaTeX documentation of all distributions of LaTeX released
-%% 2003/12/01 or later.
-%% Retain all contribution notices and credits.
-%% ** Modified files should be clearly indicated as such, including  **
-%% ** renaming them and changing author support contact information. **
-%%
-%% File list of work: IEEEtran.cls, IEEEtran_HOWTO.pdf, bare_adv.tex,
-%%                    bare_conf.tex, bare_jrnl.tex, bare_jrnl_compsoc.tex
-%%*************************************************************************
-
-% Note that the a4paper option is mainly intended so that authors in
-% countries using A4 can easily print to A4 and see how their papers will
-% look in print - the typesetting of the document will not typically be
-% affected with changes in paper size (but the bottom and side margins will).
-% Use the testflow package mentioned above to verify correct handling of
-% both paper sizes by the user's LaTeX system.
-%
-% Also note that the "draftcls" or "draftclsnofoot", not "draft", option
-% should be used if it is desired that the figures are to be displayed in
-% draft mode.
-%
-\documentclass[journal]{IEEEtran}
+\documentclass{article}  
+\usepackage[
+    left=1.5in, 
+    right=1in, 
+    top=1in,
+    top=1in]{geometry}
 \usepackage{blindtext}
 \usepackage{graphicx}
-
-% Some very useful LaTeX packages include:
-% (uncomment the ones you want to load)
-
-
-% *** MISC UTILITY PACKAGES ***
-%
-%\usepackage{ifpdf}
-% Heiko Oberdiek's ifpdf.sty is very useful if you need conditional
-% compilation based on whether the output is pdf or dvi.
-% usage:
-% \ifpdf
-%   % pdf code
-% \else
-%   % dvi code
-% \fi
-% The latest version of ifpdf.sty can be obtained from:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/oberdiek/
-% Also, note that IEEEtran.cls V1.7 and later provides a builtin
-% \ifCLASSINFOpdf conditional that works the same way.
-% When switching from latex to pdflatex and vice-versa, the compiler may
-% have to be run twice to clear warning/error messages.
-
-
-
-
-
-
-% *** CITATION PACKAGES ***
-%
-%\usepackage{cite}
-% cite.sty was written by Donald Arseneau
-% V1.6 and later of IEEEtran pre-defines the format of the cite.sty package
-% \cite{} output to follow that of IEEE. Loading the cite package will
-% result in citation numbers being automatically sorted and properly
-% "compressed/ranged". e.g., [1], [9], [2], [7], [5], [6] without using
-% cite.sty will become [1], [2], [5]--[7], [9] using cite.sty. cite.sty's
-% \cite will automatically add leading space, if needed. Use cite.sty's
-% noadjust option (cite.sty V3.8 and later) if you want to turn this off.
-% cite.sty is already installed on most LaTeX systems. Be sure and use
-% version 4.0 (2003-05-27) and later if using hyperref.sty. cite.sty does
-% not currently provide for hyperlinked citations.
-% The latest version can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/cite/
-% The documentation is contained in the cite.sty file itself.
-
-
-
-
-
-
-% *** GRAPHICS RELATED PACKAGES ***
-%
-\ifCLASSINFOpdf
-  % \usepackage[pdftex]{graphicx}
-  % declare the path(s) where your graphic files are
-  % \graphicspath{{../pdf/}{../jpeg/}}
-  % and their extensions so you won't have to specify these with
-  % every instance of \includegraphics
-  % \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
-\else
-  % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
-  % will default to the driver specified in the system graphics.cfg if no
-  % driver is specified.
-  % \usepackage[dvips]{graphicx}
-  % declare the path(s) where your graphic files are
-  % \graphicspath{{../eps/}}
-  % and their extensions so you won't have to specify these with
-  % every instance of \includegraphics
-  % \DeclareGraphicsExtensions{.eps}
-\fi
-% graphicx was written by David Carlisle and Sebastian Rahtz. It is
-% required if you want graphics, photos, etc. graphicx.sty is already
-% installed on most LaTeX systems. The latest version and documentation can
-% be obtained at: 
-% http://www.ctan.org/tex-archive/macros/latex/required/graphics/
-% Another good source of documentation is "Using Imported Graphics in
-% LaTeX2e" by Keith Reckdahl which can be found as epslatex.ps or
-% epslatex.pdf at: http://www.ctan.org/tex-archive/info/
-%
-% latex, and pdflatex in dvi mode, support graphics in encapsulated
-% postscript (.eps) format. pdflatex in pdf mode supports graphics
-% in .pdf, .jpeg, .png and .mps (metapost) formats. Users should ensure
-% that all non-photo figures use a vector format (.eps, .pdf, .mps) and
-% not a bitmapped formats (.jpeg, .png). IEEE frowns on bitmapped formats
-% which can result in "jaggedy"/blurry rendering of lines and letters as
-% well as large increases in file sizes.
-%
-% You can find documentation about the pdfTeX application at:
-% http://www.tug.org/applications/pdftex
-
-
-
-
-
-% *** MATH PACKAGES ***
-%
-%\usepackage[cmex10]{amsmath}
-% A popular package from the American Mathematical Society that provides
-% many useful and powerful commands for dealing with mathematics. If using
-% it, be sure to load this package with the cmex10 option to ensure that
-% only type 1 fonts will utilized at all point sizes. Without this option,
-% it is possible that some math symbols, particularly those within
-% footnotes, will be rendered in bitmap form which will result in a
-% document that can not be IEEE Xplore compliant!
-%
-% Also, note that the amsmath package sets \interdisplaylinepenalty to 10000
-% thus preventing page breaks from occurring within multiline equations. Use:
-%\interdisplaylinepenalty=2500
-% after loading amsmath to restore such page breaks as IEEEtran.cls normally
-% does. amsmath.sty is already installed on most LaTeX systems. The latest
-% version and documentation can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/required/amslatex/math/
-
-
-
-
-
-% *** SPECIALIZED LIST PACKAGES ***
-%
-%\usepackage{algorithmic}
-% algorithmic.sty was written by Peter Williams and Rogerio Brito.
-% This package provides an algorithmic environment fo describing algorithms.
-% You can use the algorithmic environment in-text or within a figure
-% environment to provide for a floating algorithm. Do NOT use the algorithm
-% floating environment provided by algorithm.sty (by the same authors) or
-% algorithm2e.sty (by Christophe Fiorio) as IEEE does not use dedicated
-% algorithm float types and packages that provide these will not provide
-% correct IEEE style captions. The latest version and documentation of
-% algorithmic.sty can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/algorithms/
-% There is also a support site at:
-% http://algorithms.berlios.de/index.html
-% Also of interest may be the (relatively newer and more customizable)
-% algorithmicx.sty package by Szasz Janos:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/algorithmicx/
-
-
-
-
-% *** ALIGNMENT PACKAGES ***
-%
-%\usepackage{array}
-% Frank Mittelbach's and David Carlisle's array.sty patches and improves
-% the standard LaTeX2e array and tabular environments to provide better
-% appearance and additional user controls. As the default LaTeX2e table
-% generation code is lacking to the point of almost being broken with
-% respect to the quality of the end results, all users are strongly
-% advised to use an enhanced (at the very least that provided by array.sty)
-% set of table tools. array.sty is already installed on most systems. The
-% latest version and documentation can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/required/tools/
-
-
-%\usepackage{mdwmath}
-%\usepackage{mdwtab}
-% Also highly recommended is Mark Wooding's extremely powerful MDW tools,
-% especially mdwmath.sty and mdwtab.sty which are used to format equations
-% and tables, respectively. The MDWtools set is already installed on most
-% LaTeX systems. The lastest version and documentation is available at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/mdwtools/
-
-
-% IEEEtran contains the IEEEeqnarray family of commands that can be used to
-% generate multiline equations as well as matrices, tables, etc., of high
-% quality.
-
-
-%\usepackage{eqparbox}
-% Also of notable interest is Scott Pakin's eqparbox package for creating
-% (automatically sized) equal width boxes - aka "natural width parboxes".
-% Available at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/eqparbox/
-
-
-
-
-
-% *** SUBFIGURE PACKAGES ***
-%\usepackage[tight,footnotesize]{subfigure}
-% subfigure.sty was written by Steven Douglas Cochran. This package makes it
-% easy to put subfigures in your figures. e.g., "Figure 1a and 1b". For IEEE
-% work, it is a good idea to load it with the tight package option to reduce
-% the amount of white space around the subfigures. subfigure.sty is already
-% installed on most LaTeX systems. The latest version and documentation can
-% be obtained at:
-% http://www.ctan.org/tex-archive/obsolete/macros/latex/contrib/subfigure/
-% subfigure.sty has been superceeded by subfig.sty.
-
-
-
-%\usepackage[caption=false]{caption}
-%\usepackage[font=footnotesize]{subfig}
-% subfig.sty, also written by Steven Douglas Cochran, is the modern
-% replacement for subfigure.sty. However, subfig.sty requires and
-% automatically loads Axel Sommerfeldt's caption.sty which will override
-% IEEEtran.cls handling of captions and this will result in nonIEEE style
-% figure/table captions. To prevent this problem, be sure and preload
-% caption.sty with its "caption=false" package option. This is will preserve
-% IEEEtran.cls handing of captions. Version 1.3 (2005/06/28) and later 
-% (recommended due to many improvements over 1.2) of subfig.sty supports
-% the caption=false option directly:
-%\usepackage[caption=false,font=footnotesize]{subfig}
-%
-% The latest version and documentation can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/subfig/
-% The latest version and documentation of caption.sty can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/caption/
-
-
-
-
-% *** FLOAT PACKAGES ***
-%
-%\usepackage{fixltx2e}
-% fixltx2e, the successor to the earlier fix2col.sty, was written by
-% Frank Mittelbach and David Carlisle. This package corrects a few problems
-% in the LaTeX2e kernel, the most notable of which is that in current
-% LaTeX2e releases, the ordering of single and double column floats is not
-% guaranteed to be preserved. Thus, an unpatched LaTeX2e can allow a
-% single column figure to be placed prior to an earlier double column
-% figure. The latest version and documentation can be found at:
-% http://www.ctan.org/tex-archive/macros/latex/base/
-
-
-
-%\usepackage{stfloats}
-% stfloats.sty was written by Sigitas Tolusis. This package gives LaTeX2e
-% the ability to do double column floats at the bottom of the page as well
-% as the top. (e.g., "\begin{figure*}[!b]" is not normally possible in
-% LaTeX2e). It also provides a command:
-%\fnbelowfloat
-% to enable the placement of footnotes below bottom floats (the standard
-% LaTeX2e kernel puts them above bottom floats). This is an invasive package
-% which rewrites many portions of the LaTeX2e float routines. It may not work
-% with other packages that modify the LaTeX2e float routines. The latest
-% version and documentation can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/sttools/
-% Documentation is contained in the stfloats.sty comments as well as in the
-% presfull.pdf file. Do not use the stfloats baselinefloat ability as IEEE
-% does not allow \baselineskip to stretch. Authors submitting work to the
-% IEEE should note that IEEE rarely uses double column equations and
-% that authors should try to avoid such use. Do not be tempted to use the
-% cuted.sty or midfloat.sty packages (also by Sigitas Tolusis) as IEEE does
-% not format its papers in such ways.
-
-
-%\ifCLASSOPTIONcaptionsoff
-%  \usepackage[nomarkers]{endfloat}
-% \let\MYoriglatexcaption\caption
-% \renewcommand{\caption}[2][\relax]{\MYoriglatexcaption[#2]{#2}}
-%\fi
-% endfloat.sty was written by James Darrell McCauley and Jeff Goldberg.
-% This package may be useful when used in conjunction with IEEEtran.cls'
-% captionsoff option. Some IEEE journals/societies require that submissions
-% have lists of figures/tables at the end of the paper and that
-% figures/tables without any captions are placed on a page by themselves at
-% the end of the document. If needed, the draftcls IEEEtran class option or
-% \CLASSINPUTbaselinestretch interface can be used to increase the line
-% spacing as well. Be sure and use the nomarkers option of endfloat to
-% prevent endfloat from "marking" where the figures would have been placed
-% in the text. The two hack lines of code above are a slight modification of
-% that suggested by in the endfloat docs (section 8.3.1) to ensure that
-% the full captions always appear in the list of figures/tables - even if
-% the user used the short optional argument of \caption[]{}.
-% IEEE papers do not typically make use of \caption[]'s optional argument,
-% so this should not be an issue. A similar trick can be used to disable
-% captions of packages such as subfig.sty that lack options to turn off
-% the subcaptions:
-% For subfig.sty:
-% \let\MYorigsubfloat\subfloat
-% \renewcommand{\subfloat}[2][\relax]{\MYorigsubfloat[]{#2}}
-% For subfigure.sty:
-% \let\MYorigsubfigure\subfigure
-% \renewcommand{\subfigure}[2][\relax]{\MYorigsubfigure[]{#2}}
-% However, the above trick will not work if both optional arguments of
-% the \subfloat/subfig command are used. Furthermore, there needs to be a
-% description of each subfigure *somewhere* and endfloat does not add
-% subfigure captions to its list of figures. Thus, the best approach is to
-% avoid the use of subfigure captions (many IEEE journals avoid them anyway)
-% and instead reference/explain all the subfigures within the main caption.
-% The latest version of endfloat.sty and its documentation can obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/endfloat/
-%
-% The IEEEtran \ifCLASSOPTIONcaptionsoff conditional can also be used
-% later in the document, say, to conditionally put the References on a 
-% page by themselves.
-
-
-
-
-
-% *** PDF, URL AND HYPERLINK PACKAGES ***
-%
-%\usepackage{url}
-% url.sty was written by Donald Arseneau. It provides better support for
-% handling and breaking URLs. url.sty is already installed on most LaTeX
-% systems. The latest version can be obtained at:
-% http://www.ctan.org/tex-archive/macros/latex/contrib/misc/
-% Read the url.sty source comments for usage information. Basically,
-% \url{my_url_here}.
-
-% *** Do not adjust lengths that control margins, column widths, etc. ***
-% *** Do not use packages that alter fonts (such as pslatex).         ***
-% There should be no need to do such things with IEEEtran.cls V1.6 and later.
-% (Unless specifically asked to do so by the journal or conference you plan
-% to submit to, of course. )
 
 \usepackage{amsfonts}
 \usepackage{amsmath}
@@ -383,6 +16,8 @@
 \usepackage{bbm}
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
+\usepackage{courier}
+\usepackage{setspace}
 
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{corollary}{Corollary}[theorem]
@@ -399,30 +34,58 @@
 
 \markboth{MAT Senior Thesis 2018}%
 {Shell \MakeLowercase{\textit{et al.}}: Bare Demo of IEEEtran.cls for Journals}
+
 \maketitle
+\thispagestyle{empty}
+\clearpage
+
+\doublespacing
+\pagenumbering{roman}
+\section*{Acknowledgements}
+I would like to extend a profound thank you to the following people involved directly or indirectly in the writing of my thesis:
+
+My thesis advisor for having spent countless hours explaining and re-explaining the relevant concepts for my research work, for helping guide me through the foreign land of research material for my junior IW and senior thesis alike, and for always being a motivated and enthusiastic voice to bounce ideas off of for bringing the project forward.
+
+My parents for having constantly pushed me forward and supported me on my journey through my academic challenges at Princeton and onward into the future.
+
+My sister for having been the best friend a brother could wish for, always reminding me to see the bright side of any situation as it comes. 
+
+My friends from Quad, Naacho, and the Princeton community at large, who always managed to turn every moment, from the most light to the most stressful, into a greatly memorable experience.
+
+\clearpage
+\singlespacing
+\tableofcontents
+\clearpage
+\listoffigures
+\listoftables
+\clearpage
+
+\pagenumbering{arabic}
 
 \begin{abstract}
 \end{abstract}
 
+\clearpage
+\doublespacing
 \section{Introduction}
 Bitcoin (BTC), previously relegated as a technology residing in the niche of only the most technologically competent of computer scientists, has emerged into the mainstream public in an enormous way. Ever since its explosive rise over the past year, technologists and investors both have sought to understand and exploit its technical limits. As illustrated in Figure \ref{fig:BTC_price}, speculation on the asset of Bitcoin has become an undeniable sector of the modern technology world, especially when viewed from those outside of it. While current speculations are high, many investors and technologists both struggle to understand the fundamental use case of Bitcoin and its underlying technology: blockchain. The speculative bubble is largely the product of vacuous interest pooling into an asset of misunderstood potential, paralleling the financial bubble surrounding the dot-com bubble. 
 
 \begin{figure}
     \label{fig:BTC_price}
     \centering
-    \includegraphics[width=0.4\textwidth]{BTC_price.png}
-    \caption{The price of one Bitcoin, as marked by Bloomberg. While technologists saw its promise many years prior, Bitcoin's rise in popularity in the general public has led to exponential speculative interest \cite{goldman}.}
+    \includegraphics[width=.50\textwidth]{BTC_price.png}
+    \caption[Bitcoin Price]{The price of one Bitcoin, as marked by Bloomberg. While technologists saw its promise many years prior, Bitcoin's rise in popularity in the general public has led to exponential speculative interest \cite{goldman}.}
 \end{figure}
 
 Prior to further discussing Bitcoin's use cases as a whole, it serves a purpose to understand both the technology and underlying technology first. Briefly, Bitcoin is a cryptocurrency, by which we mean a ``digital unit of exchange that is not backed by a government-issued legal tender" \cite{virtual}. The blockchain technology underpinning Bitcoin and other cryptocurrencies, as illustrated in Figure \ref{fig:blockchain}, is ``a solution to the double-spending problem using a peer-to-peer distributed timestamp server to generate computational proof of the chronological order of transactions. The system is secure as long as honest nodes collectively control more CPU power than any cooperating group of attacker nodes" \cite{bitcoin}. Described plainly, blockchain seeks to solve a technical problem, namely that of achieving consensus in a distributed system while preventing double-spending of the asset being exchanged, i.e. arbitrating exchange of a common asset without the need of a trusted central authority. Since the desired end goal is transactions without a trusted third-party, it must be the case that any peer in this network can verify transactions as valid, which has a natural correspondence to the well-known concept of public-key encryption. It, therefore, should come as little surprise that this is how wallets are implemented in Bitcoin and similar cryptocurrencies.
 
-Specifically, as with any public-key encryption system, Bitcoin exchange revolves around participating members having two keys, one public and one private. For the specific use case of Bitcoin, the private key is used to sign any transactions messages from one account to another. In turn, any other account, particularly that of a receiving party, can verify it indeed originated from the claimed party using the public key, as demonstrated in further detail in Figure \ref{fig:}.
+Specifically, as with any public-key encryption system, Bitcoin exchange revolves around participating members having two keys, one public and one private. For the specific use case of Bitcoin, the private key is used to sign any transactions messages from one account to another. In turn, any other account, particularly that of a receiving party, can verify it indeed originated from the claimed party using the public key, as demonstrated in further detail in Figure \ref{fig:address}.
 
 \begin{figure}
     \label{fig:address}
     \centering
-    \includegraphics[width=0.4\textwidth]{address.png}
-    \caption{While public-key encryption is the basic idea behind the Bitcoin protocol, there are many additional details involved in making it a practical system to be used. In particular, many additional hashing functions are used in an effort to making the underlying key hashes more manageable to deal with and store, while meeting sufficient security demands. These details, while interesting in their own right, however, are not of key important for this particular study \cite{public-key}.}
+    \includegraphics[width=.75\textwidth]{address.png}
+    \caption[Bitcoin Public-Key Wallets]{While public-key encryption is the basic idea behind the Bitcoin protocol, there are many additional details involved in making it a practical system to be used. In particular, many additional hashing functions are used in an effort to making the underlying key hashes more manageable to deal with and store, while meeting sufficient security demands. These details, while interesting in their own right, however, are not of key important for this particular study \cite{public-key}.}
 \end{figure}
 
 Incidentally, these public keys serve as what people colloquially refer to as ``wallet." Specifically, ``Bitcoin, by contrast, is designed with pseudonymous identities. Account numbers are public keys of a specific asymmetric encryption system" \cite{laundering}. This notion of Bitcoin being ``pseudonymous" simply refers to the presence of an abstraction layer between real life and those IDs used within the Bitcoin universe.
@@ -430,8 +93,8 @@ Incidentally, these public keys serve as what people colloquially refer to as ``
 \begin{figure}
     \label{fig:blockchain}
     \centering
-    \includegraphics[width=0.4\textwidth]{blockchain.png}
-    \caption{Blockchain, the underlying technology behind Bitcoin and all other cryptocurrencies, is simply a data structure consisting of an extended linked list of hash pointers with metadata. These pieces of metadata, in addition to carrying the actual BTC information of interest, more importantly serve as a piece of data that can be used for efficient verification of double-spending in a distributed system \cite{blockchain-img}.}
+    \includegraphics[width=.75\textwidth]{blockchain.png}
+    \caption[Blockchain Data Structure]{Blockchain, the underlying technology behind Bitcoin and all other cryptocurrencies, is simply a data structure consisting of an extended linked list of hash pointers with metadata. These pieces of metadata, in addition to carrying the actual BTC information of interest, more importantly serve as a piece of data that can be used for efficient verification of double-spending in a distributed system \cite{blockchain-img}.}
 \end{figure}
 
 Returning to the discussion of interest, Bitcoin when viewed from this perspective has nothing inherently making it more adept with privacy aside from the abstraction of people to public wallet addresses. Yet, this is seemingly fully comparable to the abstraction imposed by the current banking system of the abstraction between a person's account/routing number and real life identity. The key differences, however, are twofold. In the first place, the abstraction layer instituted by banks are leaky. That is to say, while people generally do not know one another banking numbers, authorities within banks have this association, for they oftentimes require personal details be provided in signing up for a bank account. Bitcoin has no similar gatekeeper with such identifying information by virtue of creating a authority-free protocol, meaning Bitcoin wallets can be procured without the need to link it with personal details. The second distinguishing feature is the ease with which such wallets can be created. In line with the lack of a central authority, there is no barrier in place preventing a single person or entity from creating many Bitcoin wallets. This follows as, in the process of making a wallet, there is \textit{no} way to distinguish whether the creator is someone who has made a wallet or not by the lack of associated identifying attributes. Thus, the properties of privacy that have come to be associated with Bitcoin have been born out of its lack of a central authority holding identifying links. 
@@ -453,23 +116,6 @@ Thus, the main objective of the study herein is to deanonymize Bitcoin transacat
 
 \section{Background}\label{background}
 To follow is the necessary technical background for the paper, of which a majority concentrates on material from graph theory. We begin by presenting the current state-of-the-art in this deanonymization space and subsequently discuss all relevant technical concepts as they relate to this study. 
-
-\subsection{Notation}
-Prior to delving into the material itself, we present a comprehensive table of the notation for the background sections below in addition to the remainder of the paper. Note that the concepts presented in Table \ref{tab:notation} will be clarified and more greatly discussed in the corresponding background section. Here we assume the standard notation of $G = (V,E)$ to be a graph with vertices $V$ and edges $E$. Such a graph can be assumed to be simple and undirected for the purposes of this paper. The specific graph of relevance will be more thoroughly explained in the methodology, from which the relevance of such assumptions will become clear.
-
-We additionally assume the standard notation of an upper-case letter (i.e. $M$) for a matrix and lower-case (i.e. $v$) for a vector and similarly $\lambda_{i}$ to be the $i^{\text{th}}$ eigenvalue as chosen when the eigenvalues are sorted from lowest to highest (in value, not magnitude).
-
-\begin{table}[]
-\centering
-\caption{Notation as used in this paper}
-\label{tab:notation}
-\begin{tabular}{cc}
-\textbf{Symbol} & \textbf{Interpretation} \\ \hline
-$G$ & Graph \\
-$V$ & Vertices of a graph \\
-$E$ & Edges of a graph \\
-\end{tabular}
-\end{table}
 
 \subsection{Deanonymization Techniques}
 Currently, two main studies have come to define the space of deanonymization, whose results and limitations we discuss herein. The objective of both was exactly that we have for this study, presented as ``our goal is not to generally deanonymize all Bitcoin users - as the abstract protocol design itself dictates that this should be impossible - but rather to identify certain idioms of use present in concrete Bitcoin network implementations that erode the anonymity of the users who engage in them" \cite{fistful}. In other words, there is no way to go from the raw BTC address information to a real-world identity. However, as with any practical system, there are often leaks in information due to sheer negligence by the end user. This parallels how, despite there being many supposed ``hacks" of Yahoo mail, this has little to do with the encryption of their internal systems, but rather due to the laziness of end users in procuring difficult-to-guess passwords.
@@ -505,8 +151,8 @@ Thus, this paper procured a clustering by directly applying the two heuristics o
 \begin{figure}
     \label{fig:fistful}
     \centering
-    \includegraphics[width=0.4\textwidth]{fistful.png}
-    \caption{The deanonymization results from `A Fistful of Bitcoins." This clearly demonstrates that, using careful catered heuristics and large-scale graph clustering, certain portions of the network can be identified with high levels of confidence. The goal of this investigation, therefore, is to procure a graph similar in nature with an even greater number of addresses identified \cite{fistful}.}
+    \includegraphics[width=.75\textwidth]{fistful.png}
+    \caption[``Fistful of Bitcoins" Result]{The deanonymization results from `A Fistful of Bitcoins." This clearly demonstrates that, using careful catered heuristics and large-scale graph clustering, certain portions of the network can be identified with high levels of confidence. The goal of this investigation, therefore, is to procure a graph similar in nature with an even greater number of addresses identified \cite{fistful}.}
 \end{figure}
 
 As discussed in the paper itself, there are a few limitations of this investigation, some of which we seek to rectify herein. One such limitation was described as ``given that our new clustering heuristic is not fully robust in the face of changing behavior - how this gap [between actual and potential anonymity] will evolve over time, and what users can do to achieve stronger anonymity guarantee" \cite{fistful}. One key limitation, therefore, is how these two heuristics alone have assumptions that fail to hold under some of the new anonymity services that have emerged atop the BTC network. One such service is called BTC mixing.
@@ -531,8 +177,8 @@ While specific details of its internal implementation are not greatly of relevan
 \begin{figure}
     \label{fig:blocksci}
     \centering
-    \includegraphics[width=0.4\textwidth]{blocksci.png}
-    \caption{The main points of relevance in this figure are the parser and analysis library. As a brief summary, the P2P node refers to the BTC node running on the client, which is constantly getting updates as they are written to blockchain by miners. Thus, the raw blockchain data sitting on the client computer will be parsed and streamlined to produce the optimized iterable data structure, which gets updated as new information arrives from the P2P node. With this iterable struture, an analysis library can be layered atop, to perform work many fold, one example of which is procuring heuristics and performing clustering \cite{blocksci}.}
+    \includegraphics[width=.75\textwidth]{blocksci.png}
+    \caption[Blocksci Architecture]{The main points of relevance in this figure are the parser and analysis library. As a brief summary, the P2P node refers to the BTC node running on the client, which is constantly getting updates as they are written to blockchain by miners. Thus, the raw blockchain data sitting on the client computer will be parsed and streamlined to produce the optimized iterable data structure, which gets updated as new information arrives from the P2P node. With this iterable struture, an analysis library can be layered atop, to perform work many fold, one example of which is procuring heuristics and performing clustering \cite{blocksci}.}
 \end{figure}
 
 In a similar vein, ``The on-disk format of blockchains is highly inefficient for our purposes. It is optimized for a different set of goals such as validating transactions and ensuring immutability...whereas we aim for a single representation of the data that can it in memory" \cite{blocksci}. In other words, the parser for Blocksci implemented many optimizations such that data structures were not as bloated as they are when stored on-disk, as validation was no longer of primary concerning. Using such streamlining and properties of caching, iteration through the blockchain data was, therefore, significantly optimized.
@@ -542,16 +188,16 @@ Thus, the main takeway herein was the presence of this additional tool of Blocks
 \subsection{Overview}
 Having established the current state of the art in the deanonymization space, we now turn to presenting the necessary technical background. We begin with an intuition of the layout of the investigation, from which all the pieces to be presented become apparent. Specifically, using the capabilities of Blocksci as elaborated upon above, we procure a set of eight heuristics, about which there are varying degrees of confidence. For sake of completeness, the heuristics are laid out here, as they are presented in \cite{heuristics}:
 
-\begin{itemize}
+\begin{enumerate}
     \item Sharing inputs in a single transaction
-    \item ``If input addresses appear as an output address, the client might have reused addresses for change."
-    \item ``If all inputs are of one address type (e.g., P2PKH or P2SH), it is likely that the change output has the same type"
-    \item ``Most clients will generate a fresh address for the change. If an output is the first to send value to an address, it is potentially the change."
-    \item ``Bitcoin Core sets the locktime to the current block height to prevent fee sniping. If all outpus have been spent, and there is only one output that has been spent in a transaction that matches this transaction’s locktime behavior, it is the change."
-    \item ``If there exists an output that is smaller than any of the inputs it is likely the change. If a change output was larger than the smallest input, then the coin selection algorithm wouldn’t need to add the input in the first place."
-    \item ``If tx is a peeling chain, returns the smaller output."
-    \item ``Detects possible change outputs by checking for output values that are multiples of 10\^digits."
-\end{itemize}
+    \item ``If input addresses appear as an output address, the client might have reused addresses for change.
+    \item If all inputs are of one address type (e.g., P2PKH or P2SH), it is likely that the change output has the same type
+    \item Most clients will generate a fresh address for the change. If an output is the first to send value to an address, it is potentially the change.
+    \item Bitcoin Core sets the locktime to the current block height to prevent fee sniping. If all outpus have been spent, and there is only one output that has been spent in a transaction that matches this transaction’s locktime behavior, it is the change.
+    \item If there exists an output that is smaller than any of the inputs it is likely the change. If a change output was larger than the smallest input, then the coin selection algorithm wouldn’t need to add the input in the first place.
+    \item If tx is a peeling chain, returns the smaller output.
+    \item Detects possible change outputs by checking for\dots values that are multiples of $10^{\text{digits}}$" \cite{heuristics}.
+\end{enumerate}
 
 With these heuristics, unlike the previous investigations, we do not directly manipulate the original Bitcoin wallet graph. Instead, we procure a \textit{separate} graph, in which nodes correspond to wallet addresses and the edges represent the presence of a heuristic. If multiple heuristics are said to be true between two nodes, the edge connecting said nodes will be the sum of the weights associated with the corresponding heuristics. In other words, denote the weights for these heuristics as $w_1, w_2, ..., w_8$ where $w_i$ naturally takes some weight $\in[0,1]$ corresponding to heuristic $i$. We further assume that these weights are normalized, namely such that $\sum_i w_i = 1$. As an example, if heuristics 2,3, and 4 come up as true between vertices $A,B$, the weight associated with edge $e_{AB}$ will be $w_2+w_3+w_4$.
 
@@ -596,23 +242,23 @@ Where a.a.s. corresponds to asymptotically almost surely convergence. The specif
 \begin{figure}
     \label{fig:region}
     \centering
-    \includegraphics[width=0.4\textwidth]{region.png}
-    \caption{This marks the region in which no algorithm can perform clustering better than by chance. If the graph procured falls within this region, seeing as the $n$ considered herein is massive, it seems entirely infeasible that any algorithm will have reasonable performance.}
+    \includegraphics[width=.60\textwidth]{region.png}
+    \caption[Region of No Deanonymization]{This marks the region in which no algorithm can perform clustering better than by chance. If the graph procured falls within this region, seeing as the $n$ considered herein is massive, it seems entirely infeasible that any algorithm will have reasonable performance.}
 \end{figure}
 
 \begin{corollary}
-Assuming $\mathcal{G}=\cup_{i}\mathcal{G_i}=\bigcup_{i}(n_i,\frac{a_i}{n_i},\frac{a_i}{n_i})$, if for any choice $i$ $a_i + b_i > 2$ and $(a_i-b_i)^2\le2(a_i+b_i)$ then the problem of clustering is not solvable as $n\rightarrow\infty$.
+Assuming $G=\cup_{i}G_i=\bigcup_{i}(n_i,\frac{a_i}{n_i},\frac{a_i}{n_i})$, if for any choice $i$ $a_i + b_i > 2$ and $(a_i-b_i)^2\le2(a_i+b_i)$ then the problem of clustering is not solvable as $n\rightarrow\infty$.
 \end{corollary}
 
 \begin{proof}
-The proof follows as a trivial consequence of the previously relayed theorem. A clustering problem is considered solvable when ``one can a.a.s. find a [cluster] which is positively correlated with the" true cluster \cite{sbm}. As any clustering algorithm must inherently cluster all subgraphs of $\mathcal{G}$, simply consider its clustering on $\mathcal{G_i}$, for which there is no positive correlation in the limit of $n\rightarrow\infty$. The overall correlation, therefore, must similarly be non-positive, meaning this overall clustering task is unsolvable.
+The proof follows as a trivial consequence of the previously relayed theorem. A clustering problem is considered solvable when ``one can a.a.s. find a [cluster] which is positively correlated with the" true cluster \cite{sbm}. As any clustering algorithm must inherently cluster all subgraphs of $G$, simply consider its clustering on $G_i$, for which there is no positive correlation in the limit of $n\rightarrow\infty$. The overall correlation, therefore, must similarly be non-positive, meaning this overall clustering task is unsolvable.
 \end{proof}
 
 \subsection{Clustering Algorithms}
 Moving on from the SBM, we look to discussing the second topic at hand, specifically graph clustering. We present the relevant algorithms, followed by specific extensions that we seek to employ due to the massive scale of the data considered herein. This discussion of clustering is summarized in a table presented following all the sections, namely table \ref{tab:algs}. We further assume that when referring to graph clustering, we wish to separate the set $V$ corresponding to $G$ into sets $\{C_1, C_2, ..., C_n\}$, such that $\cap_{i} C_{i} = \emptyset$, where the objective is to minimize the ``distance" between vertices in a single $C_i$ and maximize that between any $C_i,C_j$ for $i\neq j$, where ``distance" often has a natural interpretation as related to edge weights in the graph. 
 
 \subsubsection{K-means}
-K-means is the canonical example of a clustering algorithm. Given its age and the continual improvements in efficiency to which it has been subjected, k-means can be run efficiently on massive datasets. Specifically, ``given an integer $k$ and a set of $n$ data points in $\mathcal{R}^d$ , the goal is to choose $k$ centers so as to minimize $\phi$, the total squared distance between each point and its closest center" \cite{k-means}. The clustering of points, therefore, is simply according to which mean it is located nearest to. In other words, two vertices whose associated ``cluster mean" is the same will be clustered into the same group. The determination of such $k$ clusters, however, is an NP-hard problem, for which a heuristic has been developed and repeatedly confirmed in practice. This employed heuristic works as follows: it ``begins with k arbitrary `centers,' typically chosen uniformly at random from the data points. Each point is then assigned to the nearest center, and each center is recomputed as the center of mass of all points assigned to it. These last two steps are repeated until the process stabilizes" \cite{k-means}. 
+K-means is the canonical example of a clustering algorithm. Given its age and the continual improvements in efficiency to which it has been subjected, k-means can be run efficiently on massive datasets. Specifically, ``given an integer $k$ and a set of $n$ data points in $\mathbb{R}^d$ , the goal is to choose $k$ centers so as to minimize $\phi$, the total squared distance between each point and its closest center" \cite{k-means}. The clustering of points, therefore, is simply according to which mean it is located nearest to. In other words, two vertices whose associated ``cluster mean" is the same will be clustered into the same group. The determination of such $k$ clusters, however, is an NP-hard problem, for which a heuristic has been developed and repeatedly confirmed in practice. This employed heuristic works as follows: it ``begins with k arbitrary `centers,' typically chosen uniformly at random from the data points. Each point is then assigned to the nearest center, and each center is recomputed as the center of mass of all points assigned to it. These last two steps are repeated until the process stabilizes" \cite{k-means}. 
 
 Thus, as with many of the other algorithms considered below in this paper, k-means requires prior knowledge of the number of clusters to be considered in the end. We take an aside to address this point. While it may seem wholly arbitrary that the number of clusters be known ahead of time, as there is little way to ascertain ahead of time how many \textit{unique} users of Bitcoin there are on the network, this serves as a means by which the granularity of results can be controlled. That is to say, given two identical networks, we could potentially extract more fine clusterings with higher levels of $k$. For example, in the edge case of $k=2$, the clustering would likely resemble something along the lines of ``Coinbase accounts" and ``Non-Coinbase accounts," namely a separation of a supercluster from the remainder of the graph. We can, therefore, imagine that $k\rightarrow\infty$, clusters associated with individual people or small organizations would form out of the massive agglomerated ``Non-Coinbase" cluster. In the limit, however, we would simply end up with singleton clusters, which would serve little purpose for identifying real-world entities. The selection of $k$, therefore, is a balancing act between getting fine grain separation of individual entities and uninformative results.
 
@@ -638,7 +284,7 @@ From this theorem spawn several other results which have direct consequences in 
 Let $G$ be an undirected graph with non-negative weights. Then the multiplicity $k$ of the eigenvalue 0 of $L$ equals the number of connected components $A_1,\dots,A_k$ in the graph. The eigenspace of eigenvalue $0$ is spanned by the indicator vectors $\mathbbm{1}_{A_1},\dots,\mathbbm{1}_{A_k}$ of those components.
 \end{theorem}
 
-While we refer to \cite{spectral} for the whole proof of this result, we present a sketch of the primary portion of this proof from which an intuitive understanding arises. Specifically, consider the idealized case of a graph $\mathcal{G}$ containing clusters such that vertices within the clusters are fully connected and those in different clusters are not adjacent. The corresponding graph Laplacian for such a $\mathcal{G}$ would be:
+While we refer to \cite{spectral} for the whole proof of this result, we present a sketch of the primary portion of this proof from which an intuitive understanding arises. Specifically, consider the idealized case of a graph $G$ containing clusters such that vertices within the clusters are fully connected and those in different clusters are not adjacent. The corresponding graph Laplacian for such a $G$ would be:
 
 \[
 \begin{bmatrix}
@@ -669,8 +315,8 @@ From here, we simply notice that there are precisely as many rows as there were 
 \begin{figure}
     \label{fig:spectral_example}
     \centering
-    \includegraphics[width=0.4\textwidth]{spectral_example.png}
-    \caption{The top left is a histogram of the data spread and the remainder of the picture corresponds to the eigenvalues and eigenvectors of the Laplacian, as discussed in the exposition. From this, it is clear that a well-separated dataset has a marked jump from the eigenvalues corresponding to the the clusters and the remaining ones \cite{spectral}.}
+    \includegraphics[width=.95\textwidth]{spectral_example.png}
+    \caption[Spectral Eigenvector]{The top left is a histogram of the data spread and the remainder of the picture corresponds to the eigenvalues and eigenvectors of the Laplacian, as discussed in the exposition. From this, it is clear that a well-separated dataset has a marked jump from the eigenvalues corresponding to the the clusters and the remaining ones \cite{spectral}.}
 \end{figure}
 
 This procedure is summarized in the presentation of Algorithm \ref{alg:spectral-kmeans}. Note that their conception of spectral clustering involves beginning with a similarity matrix, namely a symmetric matrix where entry $S_{ij}$ corresponds to some notion of ``similarity" between vertices $i,j$. It is from this matrix that a similarity graph is \textit{constructed} and its Laplacian determined. There exist many ways by which such a similarity graph can be constructed. As enumerated in \cite{spectral}, three such ways are as follow:
@@ -678,7 +324,7 @@ This procedure is summarized in the presentation of Algorithm \ref{alg:spectral-
 \begin{itemize}
     \item \textbf{$\epsilon$-neighborhood graph}: Connect vertices together if the similarity metric defined between the two of them exceeds some threshold parameter value of $\epsilon$. That is to say, the adjacency matrix will have edges according to $\mathbbm{1}_{e_{ij}>\epsilon}$.
     \item \textbf{$k$-nearest neighbors}: Connect a given vertex to its $k$ nearest neighbors in sense defined by the similarity metric, i.e. create an edge for the vertices corresponding to the $k$ highest similarity measures. While this is normally asymmetric, simply avoid this problem by creating an undirected edge between the two vertices. That is to say, an edge between $v_i,v_j$ will be present if \textit{either} $v_j$ is one of the $k$-nearest neighbors for $v_i$ or vice versa (or both).
-    \item \textbf{Fully-connected graph}: Connect all edges, weighting the edges with some similiarity function, i.e. a Gaussian $G(v_i,v_j) = \text{exp}\left(e^{-\frac{|| v_i - v_j ||^2}{2\sigma^2}}\right)$
+    \item \textbf{Fully-connected graph}: Connect all edges, weighting the edges with some similiarity function, i.e. a Gaussian $G(v_i,v_j) = \text{exp}\left(-\frac{|| v_i - v_j ||^2}{2\sigma^2}\right)$
 \end{itemize}
 
 The procedure, therefore, thereafter is held as described above. For our particular case, we elect to use the third method of catering a similarity graph, although future elaborations on this work may expand this assumption and attempt other methods to determine their relative success. 
@@ -692,8 +338,8 @@ The procedure, therefore, thereafter is held as described above. For our particu
 \textbf{Input:} Cluster count $k$
 
 \State $G \gets \text{Simliarity graph for } S$
-\State $W\in\mathbb{R}^{n\times n} \gets \text{Weighted adjacency matrix for } G$ \\
-\State $L \gets D - W$ \\
+\State $W\in\mathbb{R}^{n\times n} \gets \text{Weighted adjacency matrix for } G$
+\State $L \gets D - W$
 
 \textbf{Output:} Laplacian matrix $L$
 \EndProcedure
@@ -719,7 +365,7 @@ The procedure, therefore, thereafter is held as described above. For our particu
 
 In addition to this procedure, however, there is another which relies on a different principle, albeit still related to the spectrum of the Laplacian matrix. In this alternate approach, the ``eigenvector $u_2$ corresponding to $\lambda_2$ (the second-smallest eigenvalue) is computed, and the vertices of the graph are partitioned according to the values of their corresponding entries in $u_2$" \cite{bisection}. In other words, the second eigenvector is computed and used to partition the graph into two (or three) sections, specifically corresponding to the signs of the entries of the eigenvector. This process can be subsequently repeated a number of times to achieve the desired number of $k$ clusters. Further iterations of the algorithm are selected on the basis of their second eigenvalue, namely by determining that which has the lowest eigenvalue, since this effectively corresponds to how well separable the cluster is.
 
-Returning to the previous example at hand, namely the idealized case, intuition for this algorithm becomes clear. Specifically, we have that the eigenvector of the first eigenvalue (which \textit{always} corresponds to an eigenvalue of 0) will simply be $\mathbbm{1}$, meaning there is no information contained in its entries that allow for separation. Instead using the second eigenvector, we have something of the form $[\mathbbm{0}_{A_1},\dots\mathbbm{0}_{A_{k-1}},\mathbbm{1}_{A_k},\dots\mathbbm{0}_{A_n}]$. In this case, we see that partitioning by sign would effetively separate a cluster ($A_k$ in this particular instance) from the remainder of the graph. Presumably, in the following iteration, the second eigenvalue corresponding to the subgraph of $\mathcal{G}\\A_k$ will be less than that of $A_k$, meaning it will be partitioned in the following iteration. Once again, the second lowest eigenvalue is chosen as it roughly demonstrates the corresponding cluster is the closest to the idealized separable case of all those present in the graph. We refer to this version of spectral clustering as ``hierarchical," as it involves repeated bisection and employs a top-down separation method as contrasted with the k-means spectral implementation, which clusters all vertices at once. It seems natural, therefore, that hierarchical will be more accurate but significantly slower, due to its more careful handling of separation, than its k-means counterpart, a trend we investigate more fully empirically. This procedure is fully summarized in Algorithm \ref{alg:spectral-hierarchical}. 
+Returning to the previous example at hand, namely the idealized case, intuition for this algorithm becomes clear. Specifically, we have that the eigenvector of the first eigenvalue (which \textit{always} corresponds to an eigenvalue of 0) will simply be $\mathbbm{1}$, meaning there is no information contained in its entries that allow for separation. Instead using the second eigenvector, we have something of the form $[\textbf{0}_{A_1},\dots\textbf{0}_{A_{k-1}},\mathbbm{1}_{A_k},\dots\textbf{0}_{A_n}]$. In this case, we see that partitioning by sign would effectively separate a cluster ($A_k$ in this particular instance) from the remainder of the graph. Presumably, in the following iteration, the second eigenvalue corresponding to the subgraph of $G\backslash A_k$ will be less than that of $A_k$, meaning it will be partitioned in the following iteration. Once again, the second lowest eigenvalue is chosen as it roughly demonstrates the corresponding cluster is the closest to the idealized separable case of all those present in the graph. We refer to this version of spectral clustering as ``hierarchical," as it involves repeated bisection and employs a top-down separation method as contrasted with the k-means spectral implementation, which clusters all vertices at once. It seems natural, therefore, that hierarchical will be more accurate but significantly slower, due to its more careful handling of separation, than its k-means counterpart, a trend we investigate more fully empirically. This procedure is fully summarized in Algorithm \ref{alg:spectral-hierarchical}. 
 
 \begin{algorithm}
 \caption{Hierarchical based spectral clustering \cite{spectral}}\label{alg:spectral-hierarchical}
@@ -766,15 +412,15 @@ Thus, having discussed spectral clustering, we briefly discuss its role in this 
 \subsubsection{DBSCAN}
 DBSCAN is markedly different from the previous two algorithms in that it expressly seeks to provide an algorithm that does not need a number of clusters to be supplied. Much in the way spectral clustering could be used to estimate the number of clusters using a ``separation gap," DBSCAN similarly relies on two user-supplied parameters that effectively serve as the thresholds to be considered as part of the same cluster, though the manner in which these parameters serve as a threshold is slightly more involved. Prior to diving more in depth about its inner workings, DBSCAN additionally makes it an explicit goal to not necessarily cluster all vertices. That is to say, many of the vertices may end in a state of being in an ``undefined" category with respect to how it clusters. This is quite natural, in that there are often circumstances where vertices are simply shoehorned into a particular premade cluster simply because it is the best of the available options when in reality it is clear said vertex does not fit well in \textit{any} of these clusters.
 
-Returning to the algorithm at hand, the user-supplied parameters are typically denoted as $\epsilon$ and $minPts$. From this parameter of choice, a set of ``core points" $[p_i]$ become defined, where a core point is any point $p\in G$ such that there are $\ge minPts$ other points $q$ such that the distance $d_{pq} < \epsilon$. That is to say, a core point essentially captures the intuitive notion of vertices that are ``central" in the graph, i.e. are well-connected to a significant number of other vertices in the graph. From there, we define one vertex $v_B$ being \textit{directly} reachable from another $v_B$ if the other vertex is a distance $d_{AB} < \epsilon$. We now define an arbitrary vertex $v_B$ as being reachable from another $v_A$ if there is a path of pairwise directly reachable core points that terminate in $v_B$. This is more clearly illustrated in Figure \ref{fig:dbscan}.
+Returning to the algorithm at hand, the user-supplied parameters are typically denoted as $\epsilon$ and $minPts$. From this parameter of choice, a set of ``core points" $\{p_i\}$ become defined, where a core point is any point $p\in G$ such that there are $\ge minPts$ other points $q$ such that the distance $d_{pq} < \epsilon$. That is to say, a core point essentially captures the intuitive notion of vertices that are ``central" in the graph, i.e. are well-connected to a significant number of other vertices in the graph. From there, we define one vertex $v_B$ being \textit{directly} reachable from another $v_B$ if the other vertex is a distance $d_{AB} < \epsilon$. We now define an arbitrary vertex $v_B$ as being reachable from another $v_A$ if there is a path of pairwise directly reachable core points that terminate in $v_B$. This is more clearly illustrated in Figure \ref{fig:dbscan}.
 
 To finally construct the clusters, we simply go through the set of core points and find all other vertices that are reachable from these seeds. If a vertex is not reachable from any core points, it is simply remains unclustered in the final result \cite{dbscan}.
 
 \begin{figure}
     \label{fig:dbscan}
     \centering
-    \includegraphics[width=0.4\textwidth]{dbscan.png}
-    \caption{Here the $minPts=4$. Red points correspond to the core points, yellow those that are reachable from core points, and blue that not reachable from any. Thus, in this case, all the vertices would be clustered together with the exception of the blue vertex \cite{wiki-dbscan}.}
+    \includegraphics[width=.50\textwidth]{dbscan.png}
+    \caption[DBSCAN Clustering]{Here the $minPts=4$. Red points correspond to the core points, yellow those that are reachable from core points, and blue that not reachable from any. Thus, in this case, all the vertices would be clustered together with the exception of the blue vertex \cite{wiki-dbscan}.}
 \end{figure}
 
 The main advantage of DBSCAN is that it is extremely well suited for large-scale clustering. DBSCAN additionally is capable of capturing non-flat cluster geometry, similar to spectral clustering, due to its ability to capture long-link separated clusters. Thus, it provides a means of clustering that effectively takes the superior speed of k-means and clustering flexibility of spectral into a single algorithm. Unfortunately, DBSCAN is extremely sensitive to its parameters, and its choice is oftentimes non-obvious, as it holds little semantic meaning outside of the context of the algorithm itself.
@@ -783,17 +429,17 @@ To summarize, we present these strengths and necessary parameters of the differe
 
 \begin{table}[]
 \centering
-\caption{Summary of clustering algorithms \cite{scikit}.}
+\caption[Clustering Algorithm Summary]{Summary of clustering algorithms \cite{scikit}.}
 \label{tab:algs}
 \begin{tabular}{llll}
 \textbf{Method name} & \textbf{Parameters} & \textbf{Scalability}                                                                                     & \textbf{Use Case}                                                                                                   \\ \hline
-K-Means              & number of clusters  & \begin{tabular}[c]{@{}l@{}}Very large n\_samples, medium \\ n\_clusters with Minibatch code\end{tabular} & \begin{tabular}[c]{@{}l@{}}General purpose, even cluster size, \\ flat geometry, not too many clusters\end{tabular} \\
-Spectral clustering  & number of clusters  & \begin{tabular}[c]{@{}l@{}}Medium n\_samples, \\ small n\_clusters\end{tabular}                          & \begin{tabular}[c]{@{}l@{}}Few clusters, even cluster size, \\ non-flat geometry\end{tabular}                       \\
-DBSCAN               & neighborhood size   & \begin{tabular}[c]{@{}l@{}}Very large n\_samples, \\ medium n\_clusters\end{tabular}                     & \begin{tabular}[c]{@{}l@{}}Non-flat geometry, uneven \\ cluster sizes\end{tabular}                             
+K-Means              & number of clusters  & \begin{tabular}[c]{@{}l@{}}Very large n\_samples, medium \\ n\_clusters with Minibatch code\end{tabular} & \begin{tabular}[c]{@{}l@{}}General purpose, even cluster size, \\ flat geometry, not too many clusters\end{tabular} \\ \hline
+Spectral clustering  & number of clusters  & \begin{tabular}[c]{@{}l@{}}Medium n\_samples, \\ small n\_clusters\end{tabular}                          & \begin{tabular}[c]{@{}l@{}}Few clusters, even cluster size, \\ non-flat geometry\end{tabular}                       \\ \hline
+DBSCAN               & neighborhood size   & \begin{tabular}[c]{@{}l@{}}Very large n\_samples, \\ medium n\_clusters\end{tabular}                     & \begin{tabular}[c]{@{}l@{}}Non-flat geometry, uneven \\ cluster sizes\end{tabular} \\ \hline
 \end{tabular}
 \end{table}
 
-\subsection{Clustering Evaluation}
+\subsection{Clustering Evaluation}\label{evaluation}
 Having discussed these clustering methods, it seems natural that there be a metric by which they can be compared. This seemingly trivial property, however, is not completely obvious in its definition as may seemingly be the case upon first glance. Specifically, we assume for the sake of this discussion that there is some known ground truth clustering of the vertices. Unlike the DBSCAN assumption, we further assume that \textit{all} vertices are associated with one (and exactly one) cluster of the ground truth. 
 
 Having said that, there emerge four natural metrics of evaluating clustering, per \cite{evaluation}. The notation employed by this resource, and that which we extend for the remainder of this section, is `` $\Omega = \{ \omega_1, \omega_2, \ldots, \omega_K \}$is the set of clusters and $\mathbb{C} = \{ c_1,c_2,\ldots,c_J \}$  is the set of classes" \cite{evaluation}. In other words, $\Omega$ corresponds to the guessed clusters while $C$ is the set of ground truth clusters, which are referred to as ``classes." 
@@ -815,10 +461,10 @@ I( \Omega ; \mathbb{C} ) &= \sum_k \sum_j P(\omega_k \cap c_j) \log \frac{P(\ome
 &= \sum_k \sum_j \frac{\vert\omega_k \cap c_j\vert}{N} \log \frac{N\vert\omega_k \cap c_j\vert}{\vert\omega_k\vert\vert c_j\vert}
 \end{align}
 
-where $P(\omega_k)$, $P(c_j)$, and $P(\omega_k \cap c_j)$ are the probabilities of a document being in cluster $\omega_k$, class $c_j$, and in the intersection of $\omega_k$ and $c_j$, respectively... $H$ is entropy as defined...:
+where $P(\omega_k)$, $P(c_j)$, and $P(\omega_k \cap c_j)$ are the probabilities of a document being in cluster $\omega_k$, class $c_j$, and in the intersection of $\omega_k$ and $c_j$, respectively...$H$ is entropy as defined...:
 
 \begin{align}
-H(\Omega) &= -\sum_k P(\omega_k) \log P(\omega_k)
+H(\Omega) &= -\sum_k P(\omega_k) \log P(\omega_k) \\
 &= -\sum_k \frac{\vert\omega_k\vert}{N} \log \frac{\vert\omega_k\vert}{N}
 \end{align}
 
@@ -847,7 +493,7 @@ As mentioned previously, the scale of the BTC transaction graph is massive, maki
 
 We now briefly discuss the basic concepts behind matrix estimation. Though the main concepts presented in this section do no directly come up in the investigation herein, they form the basis for some the online clustering algorithms presented in the following section, making this information still relevant to understand. Clearly, ``the optimal low rank approximation for any matrix is obtained by its truncated Singular Value Decompositions (SVD)," as this is precisely the result obtained in solving the corresponding Rayleigh Quotient problem \cite{sketch}. It, therefore, may seem unnecessary for any other estimation methods to be developed, seeing as the \textit{optimal} estimation for any arbitrary lower dimension is already known. However, the need becomes apparent in observing ``Data matrices...[that are] extremely large and distributed across many machines...render standard SVD algorithms infeasible" \cite{sketch}.
 
-Towards this end, our particular application has the former property, wherein the data is too massive to perform an SVD. Matrix sketching is one such alternate approximation method. ``There are three main matrix sketching approaches...The first generates a sparser version of the matrix...The second approach is to randomly combine matrix rows.... The third sketching approach is to find a small subset of matrix rows (or columns) that approximate the entire matrix" \cite{sketch}. In other words, all methods of matrix sketching seek to construct some smaller matrix by directly manipulating the original matrix rows. Unlike the procedure of extracting vectors from SVD, there are no additional computations required herein with the exception of manipulations performed on the initial original matrix rows. The paper additionally ``proposes a fourth approach. It draws on the similarity between the matrix sketching problem and the item frequency estimation problem" \cite{sketch}.
+Towards this end, our particular application has the former property, wherein the data is too massive to perform an SVD. Matrix sketching is one such alternate approximation method. ``There are three main matrix sketching approaches...The first generates a sparser version of the matrix...The second approach is to randomly combine matrix rows...The third sketching approach is to find a small subset of matrix rows (or columns) that approximate the entire matrix" \cite{sketch}. In other words, all methods of matrix sketching seek to construct some smaller matrix by directly manipulating the original matrix rows. Unlike the procedure of extracting vectors from SVD, there are no additional computations required herein with the exception of manipulations performed on the initial original matrix rows. The paper additionally ``proposes a fourth approach. It draws on the similarity between the matrix sketching problem and the item frequency estimation problem" \cite{sketch}.
 
 They specifically provide two methods that fall into this classification of matrix sketching, though the specifics of their inner workings are not of relevance to this study. The idea revolves around extending a clever approximation algorithm that solves the seemingly unrelated problem of estimating the count of $m$ distinct items as they appear in a data stream while using less memory than that required to have a counter per item. Specifically, their matrix sketching technique views the rows of a matrix as ``items." To gain an intuitive understanding, consider the simplified case where the matrix \textit{only} contains $e_i$ vectors, i.e. the standard $\mathbb{R}^n$ basis vectors. In this case, by applying this ``frequency counter" idea, we can construct a matrix of the basis vectors that appeared with greatest frequency, which effectively captures an approximation of the original matrix.
 
@@ -862,19 +508,16 @@ Towards that end, an alternate dubbed ``evolutionary clustering" has arisen that
 
 The algorithm, therefore, relies on incremental updating to both the eigenvalues and eigenvectors of the Laplacian as would naturally be the case for updating spectral clustering. We specifically refer to the results and algorithms catered in \cite{incremental}, which found:
 
-\begin{align}
+\begin{equation}
     \Delta v_{ij} = (K^T_{\mathcal{N}_{ij}} K_{\mathcal{N}_{ij}})^{-1} K_{\mathcal{N}_{ij}} \textbf{h}\label{eq:delta-v}
-\end{align}
+\end{equation}
 
 Where (for an eigenvector $\textbf{v}$ and some fixed threshold $\tau$):
 
 \begin{align}
     K = L - \lambda D \\
     \textbf{h} = (\Delta\lambda D + \lambda \Delta D - \Delta L)\textbf{v} \\
-    \mathcal{N}_{ij} = \{k|w_{ik} > \tau \text{ or } w_{jk} > \tau\}
-\end{align}
-
-\begin{align}
+    \mathcal{N}_{ij} = \{k|w_{ik} > \tau \text{ or } w_{jk} > \tau\} \\
     \Delta\lambda = \Delta w_{ij}\frac{a + b}{1 + c + d}\label{eq:delta-lambda}
 \end{align}
 
@@ -886,8 +529,6 @@ Where ($v_i$ denoting the $i$th component of $v$ and $d_k$ is degree of vertex $
     c = \Delta w_{ij}(v_i^2 + v_j^2) \\
     d = \sum_{k\in\mathcal{N}_{ij}} q_k d_k\Delta q_k
 \end{align}
-
-Having defined these update functions, we provide the final algorithm that was developed, namely in \ref{alg:spectral-iterative}.
 
 \begin{algorithm}
 \caption{Refinement of $\Delta\lambda$ and $\Delta v$ \cite{incremental}}\label{alg:refinement}
@@ -945,10 +586,10 @@ Having defined these update functions, we provide the final algorithm that was d
 \end{algorithmic}
 \end{algorithm}
 
-Thus, in this way, an online implementation of spectral clustering was developed and applied to the context of BTC wallet deanonymization.
+Having defined these update functions, we provide the final algorithm that was developed, namely in \ref{alg:spectral-iterative}. Thus, in this way, an online implementation of spectral clustering was developed and applied to the context of BTC wallet deanonymization.
 
 \subsection{Graph Sparsification}
-The second method to employ for our purposes are directly approximating the graph. Namely, rather than performing the clustering on the original heuristic graph $\mathcal{G}$, we could procure some related graph $\mathcal{G}'$, such that, after clustering is performed on this related graph, the clustering could naturally be extended to the original $\mathcal{G}$. Towards that end, we look to both graph sparsification and coarsening; both seek to produce a $\mathcal{G}'$ that is both simpler than and similar to the original $\mathcal{G}$, in some sense defined by the particular method employed. Sparsification seeks to produce a simpler graph by removing edges of the original graph, whereas coarsening seeks to do so by removing vertices.
+The second method to employ for our purposes are directly approximating the graph. Namely, rather than performing the clustering on the original heuristic graph $G$, we could procure some related graph $G'$, such that, after clustering is performed on this related graph, the clustering could naturally be extended to the original $G$. Towards that end, we look to both graph sparsification and coarsening; both seek to produce a $G'$ that is both simpler than and similar to the original $G$, in some sense defined by the particular method employed. Sparsification seeks to produce a simpler graph by removing edges of the original graph, whereas coarsening seeks to do so by removing vertices.
 
 As we discussed in the previous sections, namely in that regarding spectral clustering, information of the separation of clusters is inherently present in the spectrum of the corresponding Laplacian matrix. It, therefore, seems reasonable to perform graph approximation with the express goal of retaining a Laplacian matrix as close to the original as possible. What is meant by ``close" is once again ambiguous by the various matrix metrics that are typically employed. Towards that end, we use what has become the standard, namely the notion two matrices being $\sigma-$spectrally similar. Prior to defining this notion, we introduce some associated notation, namely:
 
@@ -962,13 +603,13 @@ This notion of matrices being $\sigma$-spectrally similar, while well-defined, i
 
 $$ \lambda_i(A) = \max_{S:\text{dim}(S)=i} \min_{x\in S} \frac{x^T Ax}{x^T x} $$
 
-Thus, if $\lambda_1,\dots,\lambda_n$ are the eigenvalues of $A$ and $\widetilde{λ_1},\dots,\widetilde{\lambda_n}$ are the eigenvalues of $B$, then for all $i$, $\lambda_i / \sigma \le \widetilde{\lambda_i} \le \sigma\cdot\lambda_i$. Using this notation, we can now write inequality as:
+Thus, if $\lambda_1,\dots,\lambda_n$ are the eigenvalues of $A$ and $\widetilde{\lambda_1},\dots,\widetilde{\lambda_n}$ are the eigenvalues of $B$, then for all $i$, $\lambda_i / \sigma \le \widetilde{\lambda_i} \le \sigma\cdot\lambda_i$. Using this notation, we can now write inequality as:
 
 $$ L_{\widetilde{G}} / \sigma \preceq L_{G} \preceq \sigma \cdot L_{\widetilde{G}}$$
 
 That is, two graphs are $\sigma$-spectrally similar if their Laplacian matrices are" \cite{spectral-sparse}. Thus, any sparsification that retains $\sigma-$spectral similarity is greatly of interest for the purposes of obtaining a clustering that can directly applied to the original graph. Towards that end, a method dubbed spectral sparsification was procured that seeks to sparsify edges and produce a $\sigma-$spectrally similar graph, with a $\sigma$ tightly bounded from above. This process ``involves assigning a probability $p_{u,v}$ to each edge $(u, v)\in G$ and then selecting edge $(u, v)$ to be in the graph $\widetilde{G}$ with probability $p_{u,v}$. When edge $(u, v)$ is chosen to be in the graph, we multiply its weight by $1/p_{u,v}$. This procedure guarantees that:
 
-$$ \mathbb{E}[L_{\widetilde{G}}] = L_{G} $$" \cite{spectral-sparse}
+$$ \mathbb{E}[L_{\widetilde{G}}] = L_{G}" \cite{spectral-sparse} $$
 
 In fact, the only step of this process that needs further detailing is the assignment of such probabilities $p_{u,v}$. Of course, assigning a lower probability will result in an overall sparser graph, yet doing so also loses information. Thus, the choice of $p_{u,v}$ represents balancing the desire to produce a simpler graph against that of producing one that contains most of the information that was present in the original graph. For this fact, however, a theorem was demonstrated in this same paper:
 
@@ -992,15 +633,15 @@ In addition to dealing with space issues, developing a time-efficient means to c
 \begin{figure}
     \label{fig:sag}
     \centering
-    \includegraphics[width=0.4\textwidth]{sag.png}
-    \caption{SAG (strict aggregation) assumes a strict threshold per which it is determined whether two vertices should be coalesced or not \cite{coarsening}.}
+    \includegraphics[width=.60\textwidth]{sag.png}
+    \caption[SAG Coarsening]{SAG (strict aggregation) assumes a strict threshold per which it is determined whether two vertices should be coalesced or not \cite{coarsening}.}
 \end{figure}
 
 \begin{figure}
     \label{fig:wag}
     \centering
-    \includegraphics[width=0.4\textwidth]{wag.png}
-    \caption{WAG (weighted aggregation), in contrast to SAG, determines the \textit{likelihood} for different vertices to be clustered together, whereby vertices can be iteratively aggregated with further levels of coarsening \cite{coarsening}.}
+    \includegraphics[width=.60\textwidth]{wag.png}
+    \caption[WAG Coarsening]{WAG (weighted aggregation), in contrast to SAG, determines the \textit{likelihood} for different vertices to be clustered together, whereby vertices can be iteratively aggregated with further levels of coarsening \cite{coarsening}.}
 \end{figure}
 
 Having discussed the specifics of the coarsening itself, we consider algorithms that specifically employ this technique. The main one that falls into this category is dubbed METIS, whose overall structure is as follows: ``The graph G is first coarsened down to a few hundred vertices, a bisection of this much smaller graph is computed, and then this partition is projected back towards the original graph (finer graph), by periodically refining the partition" \cite{metis}. In line with that, there are three main facets of this algorithm that necessitate discussion, specifically the coarsening, eventual clustering, and refinement of partitions during uncoarsening.
@@ -1008,11 +649,11 @@ Having discussed the specifics of the coarsening itself, we consider algorithms 
 \begin{figure}
     \label{fig:metis}
     \centering
-    \includegraphics[width=0.4\textwidth]{metis.png}
-    \caption{METIS relies on continual coarsening of the graph to a point where bisection or clustering is a relatively trivial problem and subsequently refining this partition as the graph is expanded back to its original size \cite{metis}.}
+    \includegraphics[width=.75\textwidth]{metis.png}
+    \caption[METIS Architecture]{METIS relies on continual coarsening of the graph to a point where bisection or clustering is a relatively trivial problem and subsequently refining this partition as the graph is expanded back to its original size \cite{metis}.}
 \end{figure}
 
-To be precise, the objective of the coarsening phase is to construct a sequence of graphs $\{G_{l}\}$ such that $|V_{l}| > |V_{l+1}|$, where we denote the original graph $G_{0}=(V_0,E_0)$ \cite{metis}. In line with this, ``$G_{l+1}$ is constructed from $G_l$ by finding a maximal matching $M_l\subset E_l$ of $G_l$ and collapsing together the vertices that are incident on ea ch edge of the matching. In this process no more than two vertices are collapsed together because a matching of a graph is a set of edges, no two of which are incident on the same vertex" \cite{metis}. In line with the difference between SAG and WAG, there were multiple procedures discussed by which the maximal matching could be constructed, though it was found that the HEM ``heavy-edge matching..., [WHICH] computes a matching $M_l$, such that the weight of the edges in $M_l$ is high...produces consistently better results than RM [random matching], and the amount of time spent in refinement is less than that of RM" \cite{metis}.
+To be precise, the objective of the coarsening phase is to construct a sequence of graphs $\{G_{l}\}$ such that $|V_{l}| > |V_{l+1}|$, where we denote the original graph $G_{0}=(V_0,E_0)$ \cite{metis}. In line with this, ``$G_{l+1}$ is constructed from $G_l$ by finding a maximal matching $M_l\subset E_l$ of $G_l$ and collapsing together the vertices that are incident on ea ch edge of the matching. In this process no more than two vertices are collapsed together because a matching of a graph is a set of edges, no two of which are incident on the same vertex" \cite{metis}. In line with the difference between SAG and WAG, there were multiple procedures discussed by which the maximal matching could be constructed, though it was found that the HEM ``heavy-edge matching..., [which] computes a matching $M_l$, such that the weight of the edges in $M_l$ is high...produces consistently better results than RM [random matching], and the amount of time spent in refinement is less than that of RM" \cite{metis}.
 
 Having said that, we turn to the clustering section of the algorithm, referred to in Figure \ref{fig:metis} as the ``initial partitioning phase." Specifically, the algorithm supports ``four different schemes for partitioning the coarsest graph...Three of these algorithms are based on graph growing heuristics, and the other one is based on spectral bisection" \cite{metis}. For the purposes of this investigation, we decided to make use of spectral bisection, as this allowed for applying the results of experiments we conducted on the SBM initially. 
 
@@ -1022,16 +663,132 @@ Towards that end, we can simply discuss how such a projection happens in a singl
 
 In this way, METIS is capable of performing partitioning on enormous graphs, namely by creating a mapping from a large graph to a significantly reduced graph and one from this reduced graph's clustering to that of the original graph. 
 
-\section{Methodology}\label{methodology}
+\subsection{Notation}
+Prior to delving into the experiments themselves, we present a comprehensive table of the notation introduced in the background sections for the purpose of serving as reference for the remainder of the paper. Note that the concepts presented in Table \ref{tab:notation} are clarified and more greatly discussed in their corresponding background section. 
 
+\begin{table}[]
+\centering
+\caption[Mathematical Notation]{Notation/abbreviations as used in this paper unless otherwise noted}
+\label{tab:notation}
+\begin{tabular}{|l|l|}
+\hline 
+\textbf{Symbol} & \textbf{Interpretation} \\ \hline 
+$G = (V,E)$ & Graph with vertices $V$ and edges $E$ \\\hline
+$D$ & Graph degree matrix, i.e. degree of vertex $i$ in position $D_ii$ and 0 elsewhere \\\hline
+$W$ & Graph weighted edge matrix \\\hline
+$L$ & Graph Laplacian, defined as $L = D - W$ \\\hline
+$\lambda_i$ & $i$th eigenvalue, when sorted in \textit{increasing} order, i.e. the $i$th smallest eigenvalue \\\hline
+$v_i$ & $i$th eigenvector, i.e. the eigenvector associated with $\lambda_i$ \\\hline
+$n$ & Number of nodes in the graph, i.e. $n=|V|$ \\\hline
+$\{C_i\}$ & Graph clusters, such that $\bigcup_i C_i = V$, $\bigcap_i C_i = \emptyset$, $C_i \subset V$ \\\hline
+$e_i$ & Standard $i$th basis vector of $\mathbb{R}^n$, i.e. $[0,0,\dots,1,0,\dots,0]$ (in position $i$) \\\hline
+$SBM$ & Stochastic block model (planted partition model) \\\hline
+$p,q$ & In- and out-cluster connection probabilities in SBM \\\hline
+$NMI$ & Normalized mutual information \\\hline
+$H$ & Entropy (probability/information theory) \\\hline
+$F$ & Standard statistical F-score \\\hline
+\end{tabular}
+\end{table}
+
+\section{Methodology}\label{methodology}
+Having finished discussing the main relevant background, we turn to discussing the novel experiments/results conducted for this particular investigation. As was previously described, many of the results catered herein were performed on the SBM, from which relevant trends became apparent and their applicability to the full dataset more evident. Towards that end, the experiments are described here along with their intended purpose, and the associated results are presented in the corresponding subsection of Section \ref{results}.
+
+\subsection{SBM Clustering Trial}
+Given that the objective of this investigation is to perform a clustering on the full-scale heuristics graph, the main goal of these lead-up experiments is to ascertain which of the clustering techniques discussed in the background would be best suited for our purposes. Thus, this first experiment, as with all that follow, will involve taking three metrics and assigning a cumulative score to each technique. Specifically, the three metrics will those defined in the Section \ref{evaluation}, namely the purity, normalized mutual information, and F-score (weighted rand index). Of course, the score will be proportional to each of the three accuracy metrics, though weights will be assigned appropriately to these metrics in considering the final aggregate score on the basis of what is of greatest importance for our purposes. Thus, the final ``evaluation score" will be:
+
+\begin{align}
+    score = \frac{w_{purity}purity + w_{NMI}NMI + w_{F}F}{w_{purity} + w_{NMI} + w_{F}}
+\end{align}
+
+The specific algorithms that will be tested against one another in this section will be all the offline and out-of-box (i.e. previously implemented) algorithms, namely: hierarchicial spectral, k-means spectral, spectral (scikit-learn), k-means (scikit-learn), DBSCAN (scikit-learn), and METIS. Thus, the outputs of this section will include the following:
+
+\begin{enumerate}
+    \item \textbf{Metric plots:} For each of the four metrics in addition to the cumulative score, plots of performance by the different clustering algorithms for given fixed values of $p$ (as defined in the SBM) over varying levels of $q$ will be provided. 
+    \item \textbf{Score table:} Each of the clustering algorithms will have an average score assigned to it as per their average cumulative score across the different $p$ trials.
+    \item \textbf{Sample clustering:} The graphs themselves, after clustering has been performed, will be provided for sake of understanding the nature, in terms of strengths and weaknesses, of the different clustering algorithms.
+\end{enumerate}
+
+Thus, it is the intention of this section to have a clear choice for an algorithm to be used for clustering on the final heuristics graph.
+
+\subsection{SBM Sparsification Trial}
+In addition to the offline algorithms, there were the variations discussed in the background section to see if approximate techniques could be employed for the purposes of obtaining an algorithm that performs the task with reasonable accuracy and efficiency. Amongst these was that of sparsification, which we wish to empirically analyze here in the same fashion as described in the above section, namely testing out its performance against various metrics on the SBM. Thus, we tested the performance of spectral sparsification as was expounded upon in the source described in the background. It was expected that sparsification would result in a slight degradation of accuracy, though ideally non-significant, and a decrease in computation time.
+
+\subsection{SBM Coarsening Trial}
+In addition to the sparsification, a coarsening was performed to test its accuracy against the vanilla clustering algorithms. This coarsening trial however, is somewhat redundant from the previous experiment, as METIS is itself a coarsening algorithm at heart. We, therefore, anticipate that performance, although potential superior to other vanilla algorithms, will be of lower quality than METIS, though there may arise certain trends or observations that are more parseable through this trial than can be scrutinized from the black-box algorithm that is METIS.
+
+\subsection{SBM Online Trial}
+The final portion of this was ascertaining the effectiveness of online clustering techniques. In particular, we sought to implement and test the relative performance of the evolutionary spectral algorithms when given little weight to temporal smoothness. Of course, in line with that, we anticipated the main advantage of such online trials would come in the lower need for memory consumption, meaning the score defined hereto would seemingly not account for this benefit. While this is the case, this was fully intentional, as the cost of memory is significantly outweighed by that of time, meaning memory, for those involved in the research process, was a non-factor. If, however, memory is of concern for future researchers, it may be of interest to factor this aspect into the score, potentially measuring such aspects by \texttt{top} or \texttt{/proc/meminfo} with respective to the appropriate pid. All in all, however, these four aforementioned experiments were ideally intended to result in there being one algorithm, whether it be offline, online, using sparsification, or coarsening, that performs best across all metrics to be used in the final dataset trial. 
+
+\subsection{Full Dataset Trial}
+With the final determined algorithm, trials were conducted on both partial datasets in addition to the full dataset, with emphasis being placed on its performance agaisnt the known ground truth. Thus, accuracy was measured by the same metrics as defined above except only on a subset of the full dataset. Presented as a result from this were the clustered results (similar to Figure \ref{fig:fistful}) and the accuracy metrics as a table.
 
 \section{Results}\label{results}
+We present the figures and tables as elaborated in the previous section in the following subsections. Some of the figures were relegated to the corresponding appendix for sake of space and clarity. Thus, this section was the result of running the code available at \url{https://github.com/yashpatel5400/anonychain}, as described more fully in that repo (written in Python 3). The relevant discussion, i.e. interpretation of the figures, are given in the following section, namely Section \ref{discussion}.
+
+\subsection{SBM Clustering Results}
+\begin{figure}[H]
+    \label{fig:results_purity}
+    \centering
+    \includegraphics[width=1.15\textwidth]{results/results_purity.png}
+    \caption[Clustering purity results]{Purity results}
+\end{figure}
+
+\begin{figure}[H]
+    \label{fig:results_nmi}
+    \centering
+    \includegraphics[width=1.15\textwidth]{results/results_nmi.png}
+    \caption[Clustering NMI results]{Purity results}
+\end{figure}
+
+\begin{figure}[H]
+    \label{fig:results_weighted_ri}
+    \centering
+    \includegraphics[width=1.15\textwidth]{results/results_weighted_ri.png}
+    \caption[Clustering weighted RI (F-score) results]{Purity results}
+\end{figure}
+
+\begin{figure}[H]
+    \label{fig:results_overall}
+    \centering
+    \includegraphics[width=1.15\textwidth]{results/results_overall.png}
+    \caption[Clustering overall score results]{Overall score results}
+\end{figure}
+
+\begin{figure}[H]
+    \label{fig:results_average}
+    \centering
+    \includegraphics[width=1.0\textwidth]{results/results_average.png}
+    \caption[Clustering average overall score across $p$]{Purity results}
+\end{figure}
+
+\subsection{SBM Sparsification Results}
+
+\subsection{SBM Coarsening Results}
+
+\subsection{SBM Online Results}
+
+\subsection{Full Dataset Results}
 
 \section{Discussion}\label{discussion}
+As previously mentioned, the discussion of the results presented in the previous section are all below. 
+
+\subsection{SBM Clustering Results}
+
+\subsection{SBM Sparsification Results}
+
+\subsection{SBM Coarsening Results}
+
+\subsection{SBM Online Results}
+
+\subsection{Full Dataset Results}
 
 \section{Conclusion}\label{conclusion}
+Thus, from this investigation, we have found that 
+
+For future follow-on endeavors, there are some leads on what to investigate. The first revolves around the introduction of an automated weight updating algorithm on the heuristics. This would simply be based on the experiment results combined with the some form of gradient descent updating on the weight. Much in the way SGD (stochastic gradient-descent) has currently become the de-facto means by which weights are updated in neural networks, this can be directly extended to the context of updating the weights associated with the heuristics, where they are either initialized uniformly or according to some appropriate random distribution.
 
 \clearpage
+\singlespacing
 \begin{thebibliography}{1}
 \bibitem{data-stream} Aggarwal, Charu C., et al. ``A Framework for Clustering Evolving Data Streams." Proceedings 2003 VLDB Conference, 2003, pp. 81–92., doi:10.1016/b978-012722442-8/50016-1.
 \bibitem{k-means} Arthur, David, and Sergei Vassilvitskii. ``k-Means++: The Advantages of Careful Seeding." \textit{Proceedings of the Eighteenth Annual ACM-SIAM Symposium on Discrete Algorithms}. Society for Industrial and Applied Mathematics, 2007. 
@@ -1076,5 +833,21 @@ In this way, METIS is capable of performing partitioning on enormous graphs, nam
 \bibitem{streaming} Yoo, Shinjae, et al. “Streaming Spectral Clustering.” 2016 IEEE 32nd International Conference on Data Engineering (ICDE), 2016, doi:10.1109/icde.2016.7498277. 
 \bibitem{ico} Zetzsche, Dirk A., et al. ``The ICO Gold Rush: It's a Scam, It's a Bubble, It's a Super Challenge for Regulators." SSRN Electronic Journal, 2017, doi:10.2139/ssrn.3072298.
 \end{thebibliography}
+
+\clearpage
+\section{Appendices}\label{app-clustering}
+\begin{figure}[H]
+    \label{fig:results_p-80_q-00}
+    \centering
+    \includegraphics[width=.85\textwidth]{results/results_p-80_q-00.png}
+    \caption[Clustering for $p=0.80,q=0.0$]{Results for $p=0.80,q=0.0$}
+\end{figure}
+
+\begin{figure}
+    \label{fig:results_p-90_q-15}
+    \centering
+    \includegraphics[width=1.0\textwidth]{results/results_p-90_q-15.png}
+    \caption[Clustering for $p=0.90,q=0.15$]{Results for $p=0.90,q=0.15$}
+\end{figure}
 
 \end{document}
