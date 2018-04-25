@@ -1,4 +1,4 @@
-\documentclass{article}  
+\documentclass{article}
 \usepackage[
     left=1.5in, 
     right=1in, 
@@ -32,17 +32,39 @@
 \title{Upon the Deanonymization of Bitcoin Transactions}
 \author{Yash Patel, Matt Weinberg}
 
-\markboth{MAT Senior Thesis 2018}%
-{Shell \MakeLowercase{\textit{et al.}}: Bare Demo of IEEEtran.cls for Journals}
-
-\maketitle
+\begin{center}
 \thispagestyle{empty}
+\parskip=14pt%
+\vspace*{3\parskip}%
+\LARGE{DEANONYMIZING BITCOIN TRANSACTIONS} \\
+\large{AN INVESTIGATIVE STUDY ON LARGE-SCALE GRAPH CLUSTERING}
+
+\vspace*{3\parskip}%
+\large{A senior thesis \\
+submitted to the Department of Mathematics \\
+in partial fulfillment of the requirements for \\
+the degree of Bachelor of Arts}
+
+\vspace*{2\parskip}%
+By
+
+Yash Patel
+
+\rule{7cm}{0.4pt}\\
+Under the supervision of
+
+S. Matthew Weinberg
+
+Princeton University\\
+Princeton, New Jersey
+
+May 7, 2018
+\end{center}
 \clearpage
 
 \doublespacing
-\pagenumbering{roman}
 \section*{Acknowledgements}
-I would like to extend a profound thank you to the following people involved directly or indirectly in the writing of my thesis:
+\pagenumbering{roman}I would like to extend a profound thank you to the following people involved directly or indirectly in the writing of my thesis:
 
 My thesis advisor for having spent countless hours explaining and re-explaining the relevant concepts for my research work, for helping guide me through the foreign land of research material for my junior IW and senior thesis alike, and for always being a motivated and enthusiastic voice to bounce ideas off of for bringing the project forward.
 
@@ -60,12 +82,12 @@ My friends from Quad, Naacho, and the Princeton community at large, who always m
 \listoftables
 \clearpage
 
-\pagenumbering{arabic}
-
 \begin{abstract}
+Bitcoin has emerged from the fringes of technology to the mainstream investment public recently. With speculation rampant, Bitcoin has become more and more the subject of harsh criticism in ascertaining its use case. Unfortunately, much of Bitcoin's online presence is online black markets. Towards that end, various studies have sought to partially deanonymize Bitcoin transactions, identifying wallets associated with major players in the space to help with forensic analysis and taint wallets involved with criminal activity. Such past studies, however, have rigidly enforced manually constructed heuristics to perform such deanonymization, paralleling a standard union-find algorithm. We wish to extend this work by introducing many more heuristics than were previously considered and performing a graph clustering on this extensive ``heuristics graph." Towards that end, we explored the use of various spectral, k-means, and METIS clustering algorithms on the SBM (stochastic block model) as a prototype of the heuristics graph and found hierarchical spectral clustering and METIS to have the best performance. METIS was employed due to major time concerns with the former, from which patterns of online use were extracted and confirmed with a known ground truth set. Future extensions of this work should seek to refine the hierarchical spectral clustering algorithm for its time deficiencies and refine METIS in regimes of high spatial separability.
 \end{abstract}
 
 \clearpage
+\pagenumbering{arabic}
 \doublespacing
 \section{Introduction}
 Bitcoin (BTC), previously relegated as a technology residing in the niche of only the most technologically competent of computer scientists, has emerged into the mainstream public in an enormous way. Ever since its explosive rise over the past year, technologists and investors both have sought to understand and exploit its technical limits. As illustrated in Figure \ref{fig:BTC_price}, speculation on the asset of Bitcoin has become an undeniable sector of the modern technology world, especially when viewed from those outside of it. While current speculations are high, many investors and technologists both struggle to understand the fundamental use case of Bitcoin and its underlying technology: blockchain. The speculative bubble is largely the product of vacuous interest pooling into an asset of misunderstood potential, paralleling the financial bubble surrounding the dot-com bubble. 
@@ -114,6 +136,7 @@ Thus, the main objective of the study herein is to deanonymize Bitcoin transacat
     \item Section \ref{conclusion}: Provide follow-up research ideas that could be pursued should readers feel inspired and interested in furthering the research conducted herein.
 \end{itemize}
 
+\clearpage
 \section{Background}\label{background}
 To follow is the necessary technical background for the paper, of which a majority concentrates on material from graph theory. We begin by presenting the current state-of-the-art in this deanonymization space and subsequently discuss all relevant technical concepts as they relate to this study. 
 
@@ -257,14 +280,14 @@ The proof follows as a trivial consequence of the previously relayed theorem. A 
 \subsection{Clustering Algorithms}
 Moving on from the SBM, we look to discussing the second topic at hand, specifically graph clustering. We present the relevant algorithms, followed by specific extensions that we seek to employ due to the massive scale of the data considered herein. This discussion of clustering is summarized in a table presented following all the sections, namely table \ref{tab:algs}. We further assume that when referring to graph clustering, we wish to separate the set $V$ corresponding to $G$ into sets $\{C_1, C_2, ..., C_n\}$, such that $\cap_{i} C_{i} = \emptyset$, where the objective is to minimize the ``distance" between vertices in a single $C_i$ and maximize that between any $C_i,C_j$ for $i\neq j$, where ``distance" often has a natural interpretation as related to edge weights in the graph. 
 
-\subsubsection{K-means}
-K-means is the canonical example of a clustering algorithm. Given its age and the continual improvements in efficiency to which it has been subjected, k-means can be run efficiently on massive datasets. Specifically, ``given an integer $k$ and a set of $n$ data points in $\mathbb{R}^d$ , the goal is to choose $k$ centers so as to minimize $\phi$, the total squared distance between each point and its closest center" \cite{k-means}. The clustering of points, therefore, is simply according to which mean it is located nearest to. In other words, two vertices whose associated ``cluster mean" is the same will be clustered into the same group. The determination of such $k$ clusters, however, is an NP-hard problem, for which a heuristic has been developed and repeatedly confirmed in practice. This employed heuristic works as follows: it ``begins with k arbitrary `centers,' typically chosen uniformly at random from the data points. Each point is then assigned to the nearest center, and each center is recomputed as the center of mass of all points assigned to it. These last two steps are repeated until the process stabilizes" \cite{k-means}. 
+\subsubsection{k-means}
+k-means is the canonical example of a clustering algorithm. Given its age and the continual improvements in efficiency to which it has been subjected, k-means can be run efficiently on massive datasets. Specifically, ``given an integer $k$ and a set of $n$ data points in $\mathbb{R}^d$ , the goal is to choose $k$ centers so as to minimize $\phi$, the total squared distance between each point and its closest center" \cite{k-means}. The clustering of points, therefore, is simply according to which mean it is located nearest to. In other words, two vertices whose associated ``cluster mean" is the same will be clustered into the same group. The determination of such $k$ clusters, however, is an NP-hard problem, for which a heuristic has been developed and repeatedly confirmed in practice. This employed heuristic works as follows: it ``begins with k arbitrary `centers,' typically chosen uniformly at random from the data points. Each point is then assigned to the nearest center, and each center is recomputed as the center of mass of all points assigned to it. These last two steps are repeated until the process stabilizes" \cite{k-means}. 
 
 Thus, as with many of the other algorithms considered below in this paper, k-means requires prior knowledge of the number of clusters to be considered in the end. We take an aside to address this point. While it may seem wholly arbitrary that the number of clusters be known ahead of time, as there is little way to ascertain ahead of time how many \textit{unique} users of Bitcoin there are on the network, this serves as a means by which the granularity of results can be controlled. That is to say, given two identical networks, we could potentially extract more fine clusterings with higher levels of $k$. For example, in the edge case of $k=2$, the clustering would likely resemble something along the lines of ``Coinbase accounts" and ``Non-Coinbase accounts," namely a separation of a supercluster from the remainder of the graph. We can, therefore, imagine that $k\rightarrow\infty$, clusters associated with individual people or small organizations would form out of the massive agglomerated ``Non-Coinbase" cluster. In the limit, however, we would simply end up with singleton clusters, which would serve little purpose for identifying real-world entities. The selection of $k$, therefore, is a balancing act between getting fine grain separation of individual entities and uninformative results.
 
 Thus, the main use case of k-means herein will be as a baseline for getting results. That is to say, we expect \textit{all} other algorithms employed to have superior performance than k-means, though they may suffer greatly in time complexity.
 
-\subsubsection{Spectral}
+\subsubsection{Spectral}\label{spectral-bg}
 Spectral clustering, as implied by its name, deals with clustering on the basis of eigenvalues and eigenvectors. Which eigenvectors to be used for such clustering is not immediately obvious. However, it turns out to be those of a matrix that has fundamental importance to its corresponding graph: the Laplacian. While the Laplacian has differing definitions by context, in the realm of graph theory, it simply refers to:
 
 $$ L = D-W $$
@@ -347,7 +370,7 @@ The procedure, therefore, thereafter is held as described above. For our particu
 \end{algorithm}
 
 \begin{algorithm}
-\caption{K-means based spectral clustering \cite{spectral}}\label{alg:spectral-kmeans}
+\caption{k-means based spectral clustering \cite{spectral}}\label{alg:spectral-kmeans}
 \begin{algorithmic}[1]
 \Procedure{SpectralClustering-Kmeans(S,k)}{} \\
 \textbf{Input:} Similarity matrix $S\in\mathbb{R}^{n\times n}$ \\
@@ -588,7 +611,7 @@ Where ($v_i$ denoting the $i$th component of $v$ and $d_k$ is degree of vertex $
 
 Having defined these update functions, we provide the final algorithm that was developed, namely in \ref{alg:spectral-iterative}. Thus, in this way, an online implementation of spectral clustering was developed and applied to the context of BTC wallet deanonymization.
 
-\subsection{Graph Sparsification}
+\subsection{Graph Sparsification}\ref{sparsification-bg}
 The second method to employ for our purposes are directly approximating the graph. Namely, rather than performing the clustering on the original heuristic graph $G$, we could procure some related graph $G'$, such that, after clustering is performed on this related graph, the clustering could naturally be extended to the original $G$. Towards that end, we look to both graph sparsification and coarsening; both seek to produce a $G'$ that is both simpler than and similar to the original $G$, in some sense defined by the particular method employed. Sparsification seeks to produce a simpler graph by removing edges of the original graph, whereas coarsening seeks to do so by removing vertices.
 
 As we discussed in the previous sections, namely in that regarding spectral clustering, information of the separation of clusters is inherently present in the spectrum of the corresponding Laplacian matrix. It, therefore, seems reasonable to perform graph approximation with the express goal of retaining a Laplacian matrix as close to the original as possible. What is meant by ``close" is once again ambiguous by the various matrix metrics that are typically employed. Towards that end, we use what has become the standard, namely the notion two matrices being $\sigma-$spectrally similar. Prior to defining this notion, we introduce some associated notation, namely:
@@ -627,7 +650,7 @@ and setting weights $\widetilde{w}_{(e)} = 1/p_e$  for $e\in\widetilde{E}$. Then
 
 Thus, using this theorem, we can employ spectral sparsification on the graphs at hand to obtain a graph that is simpler to deal with for clustering. The sparsification of this matrix substantially reduces the memory consumption of the model, since there are much more efficient methods by which sparse matrices can be represented in most programming paradigms than the naive 2D array representation, making it feasible to deal with the entirety of this dataset when sparsified.
 
-\subsection{Graph Coarsening}
+\subsection{Graph Coarsening}\label{coarsening-bg}
 In addition to dealing with space issues, developing a time-efficient means to cluster this data is of great importance. By directly reducing the count of vertices, graph coarsening produces a smaller graph, potentially making certain procedures feasible to run, such as eigendecomposition. Graph coarsening, unlike graph sparsification, seeks to simply clump different pieces of information into a single representation rather than removing unnecessary data. In other words, rather than simply removing vertices from a graph $G$ outright to produce $\widetilde{G}$, the process, alternatively referred to as edge contraction, typically involves coalescing two vertices $u,v$ such that the edges that independently had endpoints at either one now has an endpoint at this single combined vertex. In practice, this procedure is performed on weighted graphs, for which the collection of two edges into a single edge involves adding the weights for the initial two edges to find the resultant weight. Despite being a straightforward procedure, there exist two main variations on this process, referred to as SAG and WAG, respectively depicted in Figures \ref{fig:sag} and  \ref{fig:wag}. Roughly, the former correspond to aggregataing vertices by a strictly enforced threshold value, i.e. coalescing vertices $i,j$ if ``$w_{ij}$ is comparable to $\min\{\max_k(w_{ik}, \max_k(w_{kj})\}$" \cite{coarsening}. The latter corresponds to ``express[ing]  the likelihood of nodes belong[ing] together; these likelihoods will then accumulate at the coarser levels of the process" \cite{coarsening}. 
 
 \begin{figure}
@@ -690,6 +713,7 @@ $F$ & Standard statistical F-score \\\hline
 \end{tabular}
 \end{table}
 
+\clearpage
 \section{Methodology}\label{methodology}
 Having finished discussing the main relevant background, we turn to discussing the novel experiments/results conducted for this particular investigation. As was previously described, many of the results catered herein were performed on the SBM, from which relevant trends became apparent and their applicability to the full dataset more evident. Towards that end, the experiments are described here along with their intended purpose, and the associated results are presented in the corresponding subsection of Section \ref{results}.
 
@@ -697,7 +721,7 @@ Having finished discussing the main relevant background, we turn to discussing t
 Given that the objective of this investigation is to perform a clustering on the full-scale heuristics graph, the main goal of these lead-up experiments is to ascertain which of the clustering techniques discussed in the background would be best suited for our purposes. Thus, this first experiment, as with all that follow, will involve taking three metrics and assigning a cumulative score to each technique. Specifically, the three metrics will those defined in the Section \ref{evaluation}, namely the purity, normalized mutual information, and F-score (weighted rand index). Of course, the score will be proportional to each of the three accuracy metrics, though weights will be assigned appropriately to these metrics in considering the final aggregate score on the basis of what is of greatest importance for our purposes. Thus, the final ``evaluation score" will be:
 
 \begin{align}
-    score = \frac{w_{purity}purity + w_{NMI}NMI + w_{F}F}{w_{purity} + w_{NMI} + w_{F}}
+    score = \frac{w_{purity}purity + w_{NMI}NMI + w_{F}F}{w_{purity} + w_{NMI} + w_{F}}\label{eq:overall}
 \end{align}
 
 The specific algorithms that will be tested against one another in this section will be all the offline and out-of-box (i.e. previously implemented) algorithms, namely: hierarchicial spectral, k-means spectral, spectral (scikit-learn), k-means (scikit-learn), DBSCAN (scikit-learn), and METIS. Thus, the outputs of this section will include the following:
@@ -722,70 +746,227 @@ The final portion of this was ascertaining the effectiveness of online clusterin
 \subsection{Full Dataset Trial}
 With the final determined algorithm, trials were conducted on both partial datasets in addition to the full dataset, with emphasis being placed on its performance agaisnt the known ground truth. Thus, accuracy was measured by the same metrics as defined above except only on a subset of the full dataset. Presented as a result from this were the clustered results (similar to Figure \ref{fig:fistful}) and the accuracy metrics as a table.
 
+\clearpage
 \section{Results}\label{results}
 We present the figures and tables as elaborated in the previous section in the following subsections. Some of the figures were relegated to the corresponding appendix for sake of space and clarity. Thus, this section was the result of running the code available at \url{https://github.com/yashpatel5400/anonychain}, as described more fully in that repo (written in Python 3). The relevant discussion, i.e. interpretation of the figures, are given in the following section, namely Section \ref{discussion}.
+
+For specifics on how the trials were run, we provide the summary below:
+\begin{itemize}
+    \item \textbf{SBM Clustering:} For multiple values of $p$, i.e. holding $p$ fixed, we chose a corresponding set of values of $q$ to run trials on. For each pair $(p,q)$, five identical trials were run. Each trial produced an SBM using these values of $p,q$. From here, each of clustering algorithms were run and their accuracies, across all metrics, and times were measured. After the five trials were run, an average score was computed, thus leaving a single data point for point $(p,q)$ across the various algorithms. After being computed over all relevant values of $p,q$, the values were plotted, as seen in the below sections. Note that, across all the trials, the following were the cluster sizes used: \texttt{[63,53,32,25,20,18,14,12,8,7,7,5,4,3,3,2]}. These somewhat arbitrary sizes were chosen, as they roughyl correspond to the heuristics nature, where a small subset of the graph has a large portion of the wallets (i.e. Coinbase and Mt. Gox) whereas the remainder have a reasonable number. In addition, the overall score was computed with $w_{purity}=1.0,w_{NMI}=3.0,w_{F}=2.0$. These particular values of weights were chosen as NMI most closely captures the notion of determining the ``overlap" with the underlying clusters while also penalizing separating vertices into their own compartments. 
+    \item For clarity, the labels as associated with the various clustering algorithms are laid out below:
+    \begin{itemize}
+        \item \textbf{KMeans}: Standard k-means algorithm, as implemented in \texttt{scikit-learn}
+        \item \textbf{ManualHierarchical}: A manually implemented hierarchical spectral clustering algorithm, i.e. based on the principle of spectral bisection
+        \item \textbf{ManualKMeans}: A manually implemented k-means spectral clustering algorithm, i.e. one which seeks to perform the final clustering on graph in a single iteration
+        \item \textbf{METIS}: METIS algorithm as described in Section \ref{coarsening-bg}
+        \item \textbf{MiniBatchKMeans}: Mini-batch k-means algorithm, a modified implementation of the k-means algorithm, which seeks ``to reduce the computation time, while still attempting to optimise the same objective function. Mini-batches are subsets of the input data, randomly sampled in each training iteration. These mini-batches drastically reduce the amount of computation required to converge to a local solution. In contrast to other algorithms that reduce the convergence time of k-means, mini-batch k-means produces results that are generally only slightly worse than the standard algorithm" \ref{scikit}
+        \item \textbf{SpectralClustering}: Spectral clustering algorithm, as implemented in \texttt{scikit-learn}
+    \end{itemize}
+    \item Coarsening was implemented much in the way it is in METIS. That is to say, rather than arbitrarily selecting edges, a matching of maximal weight is determined and used for the purposes of edge contraction. From there, the clustering was performed, and clustering results expanded to the original graph. As the purpose of this particular subset of experimentation was to tease out information regarding the loss in accuracy relayed by clumping nodes, no additional ``refinement algorithm" was implemented, as is done in METIS. Instead, we simply expand the projected partition to the original graph as our final result. In addition, multiple levels of matching, as there is no correction step, simply involves repeated edge contraction, clustering, and a direct expansion to the original graph, rather than the step-wise process employed by METIS.
+    \item Any visualization of the graphs/network structure is completed using the standard Fruchterman-Reingold force-directed algorithm, as implemented by the Python NetworkX package. Briefly, the algorithm revolves around associating between each pair of vertices a ``spring" which pull them in accordance to their connection (edge) weight together against a repulsive force experienced mutually between all vertices \cite{graph-viz}.
+    \item Unlike the previously described trial averaging method, the structure for the sparsification trials was simply varying the $\varepsilon$ parameter while fixing a value of $p,q$ and conducting a single trial per chosen parameter value. This was specifically done as, unlike accuracy metrics, which vary significantly on the basis of random variations in the formation of the SBM graph, the time necessary to execute an algorithm remains remains relatively constant on the basis of the graph size. While there are variations associated with random initializations of some algorithms, such as k-means, these were not in the sparsification section, rendering this a non-issue.
+\end{itemize}
 
 \subsection{SBM Clustering Results}
 \begin{figure}[H]
     \label{fig:results_purity}
     \centering
     \includegraphics[width=1.15\textwidth]{results/results_purity.png}
-    \caption[Clustering purity results]{Purity results}
+    \caption[Clustering purity results]{Results of running the clustering algorithms for the purity metric. The $p$ values go from $p=0.5$ to $p=1.0$ in increments of $0.1$, increasing down the columns.}
 \end{figure}
 
 \begin{figure}[H]
     \label{fig:results_nmi}
     \centering
     \includegraphics[width=1.15\textwidth]{results/results_nmi.png}
-    \caption[Clustering NMI results]{Purity results}
+    \caption[Clustering NMI results]{Results of running the clustering algorithms for the NMI metric. The $p$ values go from $p=0.5$ to $p=1.0$ in increments of $0.1$, increasing down the columns.}
 \end{figure}
 
 \begin{figure}[H]
     \label{fig:results_weighted_ri}
     \centering
     \includegraphics[width=1.15\textwidth]{results/results_weighted_ri.png}
-    \caption[Clustering weighted RI (F-score) results]{Purity results}
+    \caption[Clustering weighted RI (F-score) results]{Results of running the clustering algorithms for the F-score metric. The $p$ values go from $p=0.5$ to $p=1.0$ in increments of $0.1$, increasing down the columns.}
 \end{figure}
 
 \begin{figure}[H]
     \label{fig:results_overall}
     \centering
     \includegraphics[width=1.15\textwidth]{results/results_overall.png}
-    \caption[Clustering overall score results]{Overall score results}
+    \caption[Clustering overall score results]{Results of running the clustering algorithms for the overall score metric, as defined by \ref{eq:overall}, where we specifically elect to use $w_{purity}=1.0, w_{NMI}=3.0,w_{F}=2.0$. The $p$ values go from $p=0.5$ to $p=1.0$ in increments of $0.1$, increasing down the columns.}
 \end{figure}
 
 \begin{figure}[H]
     \label{fig:results_average}
     \centering
     \includegraphics[width=1.0\textwidth]{results/results_average.png}
-    \caption[Clustering average overall score across $p$]{Purity results}
+    \caption[Clustering average overall score across $p$]{For each of the $p$ trials in Figure \ref{fig:results_overall}, we averaged the overall scores across the different values of $q$, plotted here.}
+\end{figure}
+
+\begin{figure}[H]
+    \label{fig:results_p-80_q-00}
+    \centering
+    \includegraphics[width=.85\textwidth]{results/results_p-80_q-00.png}
+    \caption[Clustering for $p=0.80,q=0.0$]{Clustering results for $p=0.80,q=0.0$, where the performed clustering is annotated in the top-left corner and the ground truth provided at the bottom. Clearly, while the colors within a particular clustering are consistent, it means nothing to compare these colors across clusterings as labelling one group $A$ and another $B$ is wholly arbitrary and just as valid vice versa. Of note is that all algorithms perform quite well here, namely any circumstance where the clusters are well-separate (i.e. $q=0$).}
+\end{figure}
+
+\begin{figure}[H]
+    \label{fig:results_p-90_q-15}
+    \centering
+    \includegraphics[width=.85\textwidth]{results/results_p-90_q-15.png}
+    \caption[Clustering for $p=0.90,q=0.15$]{Results for $p=0.90,q=0.15$. Unfortunately, interpreting these results is more difficult than the previous due to the excess of edges present and lack of a natural method of laying out the vertices on a 2D plane.}
+\end{figure}
+
+\begin{figure}[H]
+    \label{fig:cluster_times}
+    \centering
+    \includegraphics[width=.85\textwidth]{results/cluster_times.png}
+    \caption[Clustering times across algorithms $p=0.90,q=0.20$]{Results for $p=0.90,q=0.15$ for various values of $n$. Specific trends are more fully discussed later, but there is a clear trend of more time consumed the larger the graph, though the computational complexity clearly differs across the algorithms.}
 \end{figure}
 
 \subsection{SBM Sparsification Results}
 
+\begin{figure}[H]
+    \label{fig:results_hierarchical_sparsify}
+    \centering
+    \includegraphics[width=.55\textwidth]{results/results_hierarchical_sparsify.png}
+    \caption[Sparsified hierarchical spectral clustering for $p=0.75,q=0.10$]{For the fixed values of $p=0.75,q=0.10$, we performed sparsified hierarchical spectral clustering experiments, varying the $\epsilon$ parameter, as previously explained in Section \ref{sparsification-bg}. Note that the notation ``$\%_{drop}$" refers to the drop in the corresponding attribute as compared to a trial that was run without sparsification, meaning a value $<0$ refers to a drop in the corresponding metric.}
+\end{figure}
+
+\begin{figure}[H]
+    \label{fig:results_kmeans_sparsify}
+    \centering
+    \includegraphics[width=.60\textwidth]{results/results_kmeans_sparsify.png}
+    \caption[Sparsified k-means spectral clustering for $p=0.75,q=0.10$]{For the fixed values of $p=0.75,q=0.10$, we performed k-means hierarchical spectral clustering experiments, varying the $\epsilon$ parameter. A full explanation of the experiment can be found in the description of Figure \ref{fig:results_hierarchical_sparsify}.}
+\end{figure}
+
+\begin{figure}[H]
+    \label{fig:results_original_vs_sparse}
+    \centering
+    \includegraphics[width=.75\textwidth]{results/results_original_vs_sparse.png}
+    \caption[Sparsified graphs across $\epsilon$]{For the original SBM with parameters $p=0.75,q=0.10$ on the left-hand side, these show the corresponding sparsified graphs, with parameters $\epsilon=0.5,1.5,2.5,3.5,4.5$ respectively following the graphs on the right-hand side. No clustering is depicted in this illustration, as it seeks to solely convey the extent to which edges were removed.}
+\end{figure}
+
+\begin{figure}[H]
+    \label{fig:results_time_sparse}
+    \centering
+    \includegraphics[width=.85\textwidth]{results/results_time_sparse.png}
+    \caption[Clustering time vs. $\varepsilon$ sparsification parameter]{The time required for clustering with hierarchical (top) and k-means spectral clustering (bottom) with respect to the $\varepsilon$ sparsification parameter. Increasing $\varepsilon$ values correspond to a sparser graph. Surprisingly, there was no significant decrease in clustering time required even with increasing sparseness in the graph, more fully elaborated in the corresponding part of Section \ref{discussion}.}
+\end{figure}
+
 \subsection{SBM Coarsening Results}
+
+\begin{figure}[H]
+    \label{fig:results_coarsen}
+    \centering
+    \includegraphics[width=1.0\textwidth]{results/results_coarsen.png}
+    \caption[Coarsened accuracies across $p$]{Similar to the standard offline clustering algorithms, this shows (across various values of $p$) the variation of the different accuracy metrics over corresponding values of $q$. The left column is for \textbf{one} coarsening iteration; the right is for \textbf{two} iterations. Though METIS itself includes coarsening, it was included for the sake of completeness, though its results are moot for the purposes of discussion.}
+\end{figure}
+
+\begin{figure}[H]
+    \label{fig:results_contracted-1}
+    \centering
+    \includegraphics[width=1.0\textwidth]{results/results_contracted-1.png}
+    \caption[Coarsened clustering for one iteration on $p=0.90,q=0.15$]{For the original underlying truth graph depicted on the far right, each of the left images depicts the clustering performed by various algorithms on the graph produced after \textit{one} iteration of coarsening, i.e. after one maximal matching was edge contracted and the corresponding expanded clustering to its right.}
+\end{figure}
+
+\begin{figure}[H]
+    \label{fig:results_contracted-2}
+    \centering
+    \includegraphics[width=1.0\textwidth]{results/results_contracted-2.png}
+    \caption[Coarsened clustering for two iterations on $p=0.90,q=0.15$]{For the original underlying truth graph depicted on the far right, each of the left images depicts the clustering performed by various algorithms on the graph produced after \textit{two} iteration of coarsening, i.e. after two sets of maximal matchings were edge contracted and the corresponding expanded clustering to its right.}
+\end{figure}
+
+\begin{figure}[H]
+    \label{fig:results_coarsen_time}
+    \centering
+    \includegraphics[width=1.0\textwidth]{results/results_coarsen_time.png}
+    \caption[Clustering time vs. coarsening iterations]{As mentioned in the preceding description and the captions for the preceding figures, the iterations refers to how many sets of maximal matchings in the graph were contracted before the clustering was performed. Surprisingly, there was no significant decrease in clustering time required, as discussed in the corresponding part of Section \ref{discussion}.}
+\end{figure}
 
 \subsection{SBM Online Results}
 
 \subsection{Full Dataset Results}
 
+\clearpage
 \section{Discussion}\label{discussion}
 As previously mentioned, the discussion of the results presented in the previous section are all below. 
 
 \subsection{SBM Clustering Results}
+From the results, we see many trends of importance in ascertaining the choice of clustering algorithm. As briefly mentioned previously, NMI was chosen to be the best metric of interest for our purposes. However, we first discuss each of the metrics in their own right, after which we discuss the overall results and the main choice of algorithm.
+
+\subsubsection{Purity}
+To begin the discussion, we look at the purity performance of these algorithms. Clearly, the spectral k-means clustering performed best with hierarchical spectral clustering similarly performing quite well. It is of note that these two algorithms were those that were implemented manually as compared to the performance of algorithms that came pre-developed in the scikit-learn package. Of course, this is with the caveat that the time performance was \textit{significantly} worse in the case of these two algorithms, as compared to the pre-developed counterparts, though that is discussed more thoroughly in the discussions that follow. The main reason k-means spectral clustering was particularly well performant here is likely because the eigenvectors would likely be of the form discussed in Section \ref{spectral-bg}, namely where all the non-zero components for a given eigenvector corresponded to the same cluster. In other words, this implementation would prioritize keeping those associated vertices clustered together, whereas the hierarchical approach was indiscriminate in separating vertices in the progressive levels of division.
+
+It is additionally of note to study the trend of algorithmic performance with respect to $p$ \textit{and} $q$ alike, complemented with their sensitivities thereof. That is to say, as expected, all algorithms performed worse by this metric, as with all others, with increasing $q$. This is natural to assume, as, as $q\rightarrow p$, there is no way to differentiate, from the perspective of a single vertex, whether another is connected as a result of it being in the cluster or \textbf{not} being in the cluster. This trend, though visible, is less clearly present in the case of $p$. That is to say, for a given fixed value of $q$, observing the accuracy metric across various values of $p$ tended to show superior performance for high values of $p$, once again natural by the previous explanation.
+
+In addition to these observation, it is quite noteworthy that METIS had \textit{very} little sensitivity to either of $p,q$. Specifically, while it tends to perform significantly worse on the easiest cases, i.e. for much of the lower values of $q$ for any given $p$, its relative performance tends to increase as $q$ increases. While nonintuitive, this aspect makes METIS a compelling contender in addition to the manually implemented spectral clustering means, as most settings of graph clustering, particularly in our case, will not be nearly as well separated as in the simple cases where the standard algorithms were well-performant.
+
+\subsubsection{NMI}
+In addition to purity, we had the NMI (normalized mutual information), measuring the information provided towards the true clustering class by that which was guessed. Unlike the purity measure, the two most performant in this measure were the hierarchical spectral clustering and METIS algorithms. In fact, k-means spectral clustering performed nearly last in all circumstances. This drastic difference in performance quality seems to suggest that k-means spectral clustering tended to over-compartmentalize the clustering. Specifically, this is because the intention of this metric was to normalize the issue of a clustering assigning each vertex its own cluster, which would be evaluated as being ``highly pure," i.e. performing well in the purity metric but not this. From this fact alone, choosing to continue with k-means spectral clustering offers additional problems that need dealing with as compared to other algorithms.
+
+Another surprising piece of performance was the relatively high accuracy of the simply k-means and partner mini-batch k-means algorithms for low values of $q$. In other words, for well separable data, k-means is perfectly well suited for the purpose of achieving high accuracy while also completing in a reasonable time frame. Given that k-means is such a widely implemented algorithm, its efficiency has been greatly optimized, as reflected in the time results discussed subsequently. Returning to the subject at hand, the geometric nature of k-means lends itself well to clustering well-separated data. Taking a step aside, the graphing algorithm itself, i.e. the force-based algorithm used to visualize/plot the graphs in NetworkX, serves as a spatial clustering algorithm. In the case where the underlying clusters can be well separated in this visualization, therefore, marks a circumstance where a well-developed spatial partitioning algorithm can be applied, which perfectly describes k-means. While not particularly applicable for the heuristics graph, this observation is useful potentially in analyzing subsets of the graph that separate well in visualization.
+
+Further, this metric seems more sensitive to $q$ than was the purity. While still putting forth the same trend of diminishing value with $q\rightarrow\infty$, all algorithms \textit{except} hierarchical spectral clustering and METIS drastically diminish beyond $q=0.15$. Having said that, the consistency of these two algorithms make them appealing for the final heuristics graph use case, particularly as it marks setting where $q$ is not known and could greatly vary across different ``regions" in the graph.
+
+\subsubsection{Weighted RI (F-score)}
+From the weighted rand index (which specifically used $\beta=0.5$), there was not much additional information that could be gleaned that was not apparent from the NMI. Specifically, the hierarchical spectral clustering and METIS algorithms consistently perform best in the circumstances of higher $q$, whereas the simpler k-means family perform better in well-separated circumstances. The sensitivity of the F-score, however, is more comparable to that of purity with respect to $q$. The poor performance of k-means spectral clustering once again seems indicative of some form of overclustering behavior happening, since there seem to be many pairwise errors between vertices present when the clusters themselves are quite pure.
+
+\subsubsection{Time}
+We first discuss the fully expected observations and move on to the main takeaways from this compilation. As previously mentioned, with the extensive use k-means finds in academia and industry alike, it has been greatly engineered and optimized in performance time. This, of course, comes bundled with the fact that its complementary mini-batch algorithm is more performant, as it only uses batches of the data to perform updates for the associated means, much in the way mini-batch gradient descent trades off time efficiency for accuracy. In addition to these notes, the general suite of scikit-learn algorithms all perform better than those developed manually. This should come as no surprise considering both the large community involved in the development of scikit-learn, its extensive industry use, and lack of thorough optimization considered in procuring the manual implementations of spectral clustering.
+
+In addition to these obvious points of of consideration, however, was the point previously hypothesized of hierarchical spectral clustering performing generally better over accuracy metrics but worse in time compared to its k-means counterpart, which turns out to be true. As expected, the simultaneous clustering offered by k-means tends to attempt to separate vertices inappropriately top-down and misses key substructure that exists as a result of the disparate cluster sizes. Hierarchical clustering, in contrast, has ample opportunity to identify substructure, as each iteration looks to the existing clusters to determine which is ``most separable," meaning it only chooses to separate those clusters that naturally look at though they should be split. K-means has no such equivalent opportunity, meaning it works best in the case of there being similarly sized clusters across the true distribution. 
+
+This clustering is additionally \textit{very} sensitive for small clusters. Namely, in the case of small clusters, a single ``dirty edge," i.e. presence of an edge when one should not exist or vice versa, would greatly throw off the corresponding eigenvector relative to the other eigenvectors. As a result, the corresponding eigenvalue would likely not be sufficiently close to 0 to be in the first $k$ eigenvectors, meaning it would completely ruin the prospect of clustering, whereas the comparable issue in hierarchical spectral clustering would solely soil a single ``leaf" in the tree of clustering bisections.
+
+Having taken that aside, however, hiearchical clustering appears \textit{significantly} slower than all other clustering algorithms, which, as expounded upon in the following section, effectively renders it useless for the final application. That being said, however, ideally with further optimization and computation power, this algorithm could be brought to the point where it is applicable in such levels of scale. 
+
+METIS, in contrast, performs \textit{significantly} faster than all other algorithms, pushing it as the ideal choice of use. Of course, this time efficiency likely arises from three sources. The first is one purely a matter of implementation, namely METIS is implemented in \texttt{C++} as compared to these other algorithms, which were developed in Python, though a majority tend to rely on \texttt{C++} API hooks rather than Pure Python. The second is that METIS is written for parallel execution, that is, taking advantage of all cores present on the machine at hand. Unfortunately, Python has a global thread lock, making this less of a possibility for implementing such clustering efficiency improvements. The final point is that of the algorithm itself, which clearly works on a significantly reduced graph to improve time expended as compared to the vanilla algorithms, whose main bottleneck of eigendecomposition is approximately $O(n^3)$ for $n$ being the number of vertices involved. Thus, with these things considered, METIS is the clear choice in considering the time complexity.
+
+\subsubsection{Overall}
+From these overall weighted metrics, we therefore see the trends upon which we previously elaborated. Specifically, in the the family of k-means algorithms is well performant in the separable cases, whereas METIS and hierarchical spectral clustering perform better given a more heterogeneous graph. This is unfortunately obfuscated in the performance as displayed against various values of $p$. Namely, in averaging across the $q$ values, METIS is shown to be seemingly much worse than it performed, as its performance is not great on lower $q$ values. Thus, the case of an \textit{average} $q$ seems to suggest k-means over METIS, this fully ignores the fact that we anticipate the heuristics graph to best not remotely well separated.
+
+Taking a moment aside to elaborate on this crucial point, our graph, as previously mentioned, was catered with \textit{several} approximate heuristics. That is to say, many of the heuristics were explicitly placed such that, while they give \textit{some} suggestion about the link between two vertices, they are in no way fully indicative thereof. In other words, the graph was catered with the initial intention that a clustering algorithm would be capable of separating vertices with links between them if they were determined to not be strong or discriminatory enough. 
+
+Having said that, it now becomes necessary to prune clustering algorithms with the context of application in mind. In other words, as the k-means family is incapable of clustering tangled graphs, their applicability here is limited, despite their time efficiency being amongst the best offered by the alternatives. While this is the case herein, however, it may fully well be the case that future applications do not have such loosely catered heuristics and instead elect to use ones that are more definitive, as they were in ``Fistful of Bitcoin," in which case k-means would be a strongly recommended option.
+
+In line with these points, therefore, the main options are either hierarchical spectral clustering or METIS. The former, however, from the time discussion is \textit{completely} impractical for the scale of graph considered herein. Thus, given the time constraints, METIS was the optimal choice for the purposes of this investigation, which we seek to carry forward against the alternative clustering techniques.
 
 \subsection{SBM Sparsification Results}
+As expected by definition of the spectral clustering parameter, we had greater sparsification happening as $\epsilon\rightarrow\infty$. In line with that, only the two spectral clustering algorithms were of relevance for this particular experiment, as this sparsification method was specifically chosen with the intention of procuring a graph whose Laplacian matrix was as similar to that of the original as possible, which is largely only of relevance for spectral clustering. In addition, the spectral clustering of scikit-learn was not tested, as the previous section revealed that it consistently performed worse than either of the manually implemented alternatives by any of the metrics aside from time. 
+
+Of note for the accuracy metrics is that the performance, which was expected to decline with increasing sparsification, naturally due to the elimination of additional information that could be used to cluster vertices, decreased seemingly piecewise. However, upon further investigation, it became clear that for certain levels of $\varepsilon$ (i.e. for sufficiently low values), no sparsification occurred, leaving the original graph. Similarly, for sufficiently high values, the entire graph simply consisted of separated vertices, making clustering largely an exercise in guessing. This explains the nature of there being two clumps of points near both the low and high values of $\varepsilon$ and a downward trend connecting the two clusters.
+
+Surprisingly, however, the desired effect of time reduction was not too significant. It turns out that sparse matrices are not any easier to eigendecompose than their dense counterparts. Although there are more efficient means of calculating just the first few eigenvectors, rather than the entire decomposition, that arise in the case of sparse matrices, the original graph matrices are sufficiently sparse as to allow for that to be applied. In other words, sparsification offers little of service for our purpose, as the graph of 200 million vertices and 10 billion edges is roughly only $.000025\%$ filled with non-zero values. Hence, the main contender remains METIS without the implementation of additional sparsification at this point.
 
 \subsection{SBM Coarsening Results}
+As mentioned in the preceding exposition, discussion of METIS is moot for this particular setting. In other words, as it already includes coarsening, additional coarsening with worse reconstruction layered on top is impractical for future purposes, meaning there is little practical value to be gleaned from that analysis. Instead, we choose to investigate other trends. Of note is that all the non-manual performances were \textit{significantly} diminished in effectiveness as contrasted to the algorithms implemented manually. This perhaps has to do with the lesser sensitivity of the eigenvectors to the coarsening of the graph as compared to significant changes in spatial structure that arise from just collapsing a few nodes, explaining why k-means was affected detrimentally to such a large degree. This, however, fails to explain the significant drop in the performance of spectral clustering, for which a more thorough understanding of the source code would be required. Needless to say, the manual clustering fared relatively much better through degrees of coarsening.
+
+Surprisingly, however, the coarsening did not provide ample speedup to warrant its integration. From the measured time performance, most of the algorithms were quite static across the number of iterations of coarsening. Each iteration, as it ``removes" a vertex, may remove many edges from the graph, as any incident edges would simply be integrated with those of the adjacency vertex. However, the supposed boost in speed would arise from the reduction in vertex count rather than that of edges, as evidenced by the lack of speedup from graph sparsification. Specifically, as eigendecomposition is $O(n^3)$, speed is greatly dependent upon the vertex count, meaning any significant reduction should greatly improve performance. 
+
+However, it appears as though the process of obtaining a maximal matching itself takes up any time saved by this reduction, resulting in a relatively flat curve. It seems likely that METIS achieves its remarkable speed through use of parallel computation of matchings or simply a more optimized implementation thereof. From this, however, it seems that no manual coarsening can replace those performed in METIS, both due to the loss in efficiency and accuracy, resulting from the lack of corrections for projected partitions. Thus, from these results, we continue forward with the choice of METIS for clustering.
 
 \subsection{SBM Online Results}
 
 \subsection{Full Dataset Results}
 
+\clearpage
 \section{Conclusion}\label{conclusion}
-Thus, from this investigation, we have found that 
+Thus, from this investigation, we have found many points of interest for the deanonymization of Bitcoin and cryptocurrency transactions in general. Specifically, these points tend to deal with the general application of graph clustering algorithms towards the context of a catered heuristics graph associated with the likelihood two wallets correspond to the same real-world entity. Towards that end, we found that the family of k-means algorithms tend to be very well performant in both time and all accuracy metrics of interest when data is able to be spatially well separated. That is to say, with respect to the SBM, if the model at hand can be modelled for an arbitrary value of $p$ but low value of $q$, any k-mean derivative will be very suited. However, we found that, given the heuristics graph was quite loosely generated, such the context here, as with any similar studies going forward, do not have the desired spatial separability.
+
+Given these non-flat geometries of clustering being sought, spectral clustering proved to be of great performance. In particular, the hierarchical spectral methods had remarkable performance against all metrics but suffered greatly from a time efficiency perspective. K-means spectral clustering, on the other hand, suffered significant drawbacks on all accuracy metrics aside from purity, making it seem to be susceptible to over-compartmentalization in clustering. METIS, on the other hand, was \textit{significantly} faster than all other algorithms in performing clustering, though its relative performance on well-separated data was quite poor. METIS did have a level of consistency across the across all accuracy metrics when viewed across $q$ that made it an appealing choice for the purposes of clustering the full-scale graph.
+
+In addition to these standard clustering algorithms, we attempted to performed sparsification, coarsening, and online clustering to see their relative performance in accuracy and time. Sparsification, however, caused both significant reductions in all accuracy metrics, across both k-means and hierarchical spectral clustering, without causing any significant reduction in time. We determined that no major improvements in clustering efficiency result from the removal of edges, as the eigendecomposition is largely independent of the presence of non-zero elements in the corresponding matrix. Coarsening, similarly, resulted in little reduction in time required for clustering and caused a reduction in efficiency, though this was more so caused by the time expended on performing the coarsening itself.
+
+For the online clustering, we found \textbf{INSERT ONLINE RESULTS HERE}
+
+From the final deanonymization, we found \textbf{INSERT FINAL RESULTS HERE}.
 
 For future follow-on endeavors, there are some leads on what to investigate. The first revolves around the introduction of an automated weight updating algorithm on the heuristics. This would simply be based on the experiment results combined with the some form of gradient descent updating on the weight. Much in the way SGD (stochastic gradient-descent) has currently become the de-facto means by which weights are updated in neural networks, this can be directly extended to the context of updating the weights associated with the heuristics, where they are either initialized uniformly or according to some appropriate random distribution.
+
+A second line of interest revolves around the limitations of METIS. Specifically, as was found in many of the accuracy metrics, METIS is quite poorly performant for well-separable datasets. It, therefore, seesm quite natural to pair METIS with a superior, similarly fast algorithm for such simple cases. Specifically, METIS would be best couple with k-means for these circumstances. It follows that a method to determine the separability of data would need to be procured, from which a decision as to which algorithm to use could be made. Such a computation, however, would itself need to be made efficient should the overall algorithm be intended to be employed on the entire dataset. It, therefore, seems natural that this ``separability measurement" be done locally, akin to the mini-batch employed by certain efficient derivatives of algorithms.
+
+In line with that, the hierarchical spectral clustering performed remarkably well by measure of all metrics yet could not be applied due to its being inefficient. In line with that, there arises the need to either look to parallelizing the algorithm or simply implement it in \texttt{C++} to see whether it could be applied to the generalized dataset and procure results of greater substance than were derived herein. Similarly, if the coarsening could be made more efficient, potentially by simply extracting the relevant code as it is implemented in METIS, it could be combined with hierarchical spectral clustering to procure a highly accurate and efficient method to be applied to the final dataset.
 
 \clearpage
 \singlespacing
@@ -826,6 +1007,7 @@ For future follow-on endeavors, there are some leads on what to investigate. The
 \bibitem{fast-kmeans} Shindler, Michael, et al. ``Fast and Accurate k-Means For Large Datasets.” Advances in Neural Information Processing Systems, 2011. 
 \bibitem{public-key} Shirriff, Ken. ``Ken Shirriff's Blog." Bitcoins the Hard Way: Using the Raw Bitcoin Protocol, www.righto.com/2014/02/bitcoins-hard-way-using-raw-bitcoin.html. 
 \bibitem{resistance} Spielman, Daniel A., and Nikhil Srivastava. ``Graph Sparsification by Effective Resistances." Proceedings of the Fourtieth Annual ACM Symposium on Theory of Computing - STOC 08, 2008, doi:10.1145/1374376.1374456.
+\bibitem{graph-viz} Tamassia, Roberto. Handbook of Graph Drawing and Visualization. CRC Press Taylor \& Francis Group, 2016. 
 \bibitem{terry} Tao, Terrence. ``A Review of Probability Theory." \textit{Terry Tao}, terrytao.wordpress.com/2010/01/01/254a-notes-0-a-review-of-probability-theory/.
 \bibitem{virtual} Trautman, Lawrence J. ``Virtual Currencies: Bitcoin \& What Now after Liberty Reserve and Silk Road?" SSRN Electronic Journal, 2014, doi:10.2139/ssrn.2393537.
 \bibitem{blockchain-img} Wander, Matthaus. ``Bitcoin Block Data." Wikimedia Commons, 22 June 2013, commons.wikimedia.org/wiki/File:Bitcoin\_Block\_Data.png.
@@ -835,19 +1017,9 @@ For future follow-on endeavors, there are some leads on what to investigate. The
 \end{thebibliography}
 
 \clearpage
-\section{Appendices}\label{app-clustering}
-\begin{figure}[H]
-    \label{fig:results_p-80_q-00}
-    \centering
-    \includegraphics[width=.85\textwidth]{results/results_p-80_q-00.png}
-    \caption[Clustering for $p=0.80,q=0.0$]{Results for $p=0.80,q=0.0$}
-\end{figure}
+\section*{Honor Pledge}
+\textit{I pledge my honour that this paper represents my own work in accordance with University regulations.}
 
-\begin{figure}
-    \label{fig:results_p-90_q-15}
-    \centering
-    \includegraphics[width=1.0\textwidth]{results/results_p-90_q-15.png}
-    \caption[Clustering for $p=0.90,q=0.15$]{Results for $p=0.90,q=0.15$}
-\end{figure}
+\noindent - Yash Patel
 
 \end{document}
