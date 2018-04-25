@@ -35,17 +35,17 @@
 \begin{center}
 \thispagestyle{empty}
 \parskip=14pt%
-\vspace*{3\parskip}%
+\vspace*{5\parskip}%
 \LARGE{DEANONYMIZING BITCOIN TRANSACTIONS} \\
 \large{AN INVESTIGATIVE STUDY ON LARGE-SCALE GRAPH CLUSTERING}
 
-\vspace*{3\parskip}%
+\vspace*{5\parskip}%
 \large{A senior thesis \\
 submitted to the Department of Mathematics \\
 in partial fulfillment of the requirements for \\
 the degree of Bachelor of Arts}
 
-\vspace*{2\parskip}%
+\vspace*{4\parskip}%
 By
 
 Yash Patel
@@ -763,7 +763,7 @@ For specifics on how the trials were run, we provide the summary below:
         \item \textbf{ManualHierarchical}: A manually implemented hierarchical spectral clustering algorithm, i.e. based on the principle of spectral bisection
         \item \textbf{ManualKMeans}: A manually implemented k-means spectral clustering algorithm, i.e. one which performs the final clustering on graph in a single iteration
         \item \textbf{METIS}: METIS algorithm as described in Section \ref{coarsening-bg}
-        \item \textbf{MiniBatchKMeans}: Mini-batch k-means algorithm, a modified implementation of the k-means algorithm, which seeks ``to reduce the computation time, while still attempting to optimise the same objective function. Mini-batches are subsets of the input data, randomly sampled in each training iteration. These mini-batches drastically reduce the amount of computation required to converge to a local solution. In contrast to other algorithms that reduce the convergence time of k-means, mini-batch k-means produces results that are generally only slightly worse than the standard algorithm" \ref{scikit}
+        \item \textbf{MiniBatchKMeans}: Mini-batch k-means algorithm, a modified implementation of the k-means algorithm, which seeks ``to reduce the computation time, while still attempting to optimise the same objective function. Mini-batches are subsets of the input data, randomly sampled in each training iteration. These mini-batches drastically reduce the amount of computation required to converge to a local solution. In contrast to other algorithms that reduce the convergence time of k-means, mini-batch k-means produces results that are generally only slightly worse than the standard algorithm" \cite{scikit}
         \item \textbf{SpectralClustering}: Spectral clustering algorithm, as implemented in \texttt{scikit-learn}
     \end{itemize}
     \item Coarsening was implemented much in the way it is in METIS. That is to say, rather than arbitrarily selecting edges, a matching of maximal weight was determined and used for the purposes of edge contraction. From there, the clustering was performed, and clustering results expanded to the original graph. As the purpose of this particular subset of experimentation was to tease out information regarding the loss in accuracy relayed by clumping nodes, no additional ``refinement algorithm" was implemented, as is done in METIS. Instead, we simply expand the projected partition to the original graph as our final result. In addition, performing multiple levels of matching simply involved repeated edge contraction, clustering, and a direct expansion to the original graph, rather than the stepwise uncoarsening process employed by METIS.
